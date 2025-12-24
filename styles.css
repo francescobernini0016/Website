@@ -1,0 +1,667 @@
+:root {
+  --bg-color: #FFFFFF;
+  --text-color: #000000;
+  --card-bg: #f1f1f1;
+  --border-color: #000000;
+  --font-main: Arial, sans-serif;
+}
+
+/* General styles */
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: var(--font-main);
+
+  /* Handle scrolling */
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+body {
+  box-sizing: border-box;
+  position: relative;
+}
+
+#hero {
+  position: relative;
+  height: calc(100vh - 40px);
+  /* Fallback */
+  height: calc(100dvh - 40px);
+  /* Dynamic Viewport Height minus Navbar */
+  width: 100%;
+  overflow: hidden;
+  /* Keep hero content contained */
+}
+
+#floating-hero {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: 300px;
+  /* Compact width */
+  height: auto;
+  /* Dynamic height */
+  display: flex;
+  flex-direction: column;
+  background-color: var(--card-bg);
+  /* White card */
+  border: 1px solid var(--border-color);
+  padding: 10px;
+  /* Reduced padding */
+  z-index: 2001;
+  transition: opacity 0.3s ease, transform 0.3s ease, visibility 0s linear 0s;
+  overflow: hidden;
+}
+
+.card-header {
+  margin-bottom: 10px;
+  /* Reduced margin */
+  padding-bottom: 0;
+  /* Space for border */
+  border-bottom: none;
+  /* Single static stroke */
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.box-expand-btn {
+  background: none;
+  border: none;
+  font-family: var(--font-main);
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0;
+  /* Remove horizontal padding */
+  line-height: 1;
+  margin-top: 10px;
+  /* Balanced gap */
+}
+
+.box-expand-btn:hover {
+  opacity: 0.6;
+}
+
+h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  /* Slightly smaller for card */
+}
+
+#hero-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.box-content {
+  transition: max-height 0.2s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.5s ease;
+  overflow: hidden;
+  margin-bottom: 5px;
+  position: relative;
+}
+
+.box-content.snippet {
+  cursor: pointer;
+  /* Let content size itself, but clamped */
+}
+
+.box-content.snippet:hover p {
+  text-decoration: underline;
+}
+
+/* Remove the gradient overlay */
+.box-content.snippet::after {
+  display: none;
+}
+
+/* Apply clamp to the inner paragraph */
+.box-content.snippet p {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.box-content.expanded {
+  cursor: default;
+}
+
+.box-content.expanded p {
+  display: block;
+  /* Remove clamp */
+  -webkit-line-clamp: unset;
+  overflow: visible;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+#floating-index {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  /* Revert to right for mobile */
+  left: auto;
+  z-index: 2001;
+  text-align: right;
+  /* Right aligned as requested */
+  font-size: 1rem;
+  line-height: 1.5;
+  background-color: var(--card-bg);
+  /* White card */
+  border: 1px solid var(--border-color);
+  padding: 10px;
+  /* Reduced padding */
+  width: 150px;
+  /* Less wide */
+  height: auto;
+  /* Dynamic height */
+  display: none !important;
+  /* Hidden as requested */
+  flex-direction: column;
+  transition: opacity 0.3s ease, transform 0.3s ease, visibility 0s linear 0s;
+  overflow: hidden;
+}
+
+
+
+#contact {
+  padding-top: 12px;
+  /* Balanced spacing */
+  margin-top: 0;
+}
+
+#bio {
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 12px;
+  margin-bottom: 0;
+  /* Remove extra margin */
+}
+
+#bio-content {
+  margin-bottom: 0;
+}
+
+#contact p {
+  margin: 0;
+  /* Remove all default margins */
+}
+
+/* Ensure Index title aligns with Hero title */
+#floating-index .card-header h1 {
+  /* Ensure consistent height/line-height */
+  line-height: 1.2;
+}
+
+
+
+#index-list-container {
+  border-top: 1px solid var(--border-color);
+  padding-top: 0;
+}
+
+#floating-index a {
+  display: block;
+  color: var(--text-color);
+  text-decoration: none;
+  cursor: pointer;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+#floating-index a:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+#floating-index a:hover {
+  text-decoration: underline;
+}
+
+.paragraph {
+  margin: 0 0 20px 0;
+  font-size: 1rem;
+  line-height: 1.4;
+}
+
+/* Remove margin from contact paragraph specifically */
+#contact.paragraph {
+  margin-bottom: 0;
+}
+
+
+
+.paragraph p {
+  pointer-events: auto;
+  /* Re-enable pointer events for text selection */
+  font-size: 1rem;
+  /* Compact text for card */
+  line-height: 1.4;
+}
+
+.draggable {
+  position: absolute;
+  z-index: 9;
+  background-color: var(--card-bg);
+  text-align: center;
+  border: 1px solid var(--border-color);
+  padding: 0;
+  cursor: grab;
+  /* Indicate draggable */
+  user-select: none;
+  /* Prevent selection while dragging */
+  transition: transform 0.2s ease;
+  /* Smooth scale on drag */
+}
+
+.draggable.animating {
+  /* Smoother, less accentuated bounce */
+  transition: top 1s cubic-bezier(0.25, 1, 0.5, 1), left 1s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.draggable:active {
+  cursor: grabbing;
+  transform: scale(1.05);
+  /* Pop up effect */
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  /* Shadow for depth */
+  z-index: 4000 !important;
+  /* Ensure on top while dragging */
+}
+
+/* General image styles (for draggable images) */
+.draggable img {
+  display: block;
+  max-width: 75vw;
+  /* Mobile: 25% bigger (60 -> 75) */
+  max-height: 50vh;
+  /* Mobile: 25% bigger (40 -> 50) */
+  width: auto;
+  height: auto;
+  pointer-events: none;
+}
+
+/* Project Sections */
+.project-section {
+  padding: 0;
+  /* Remove padding to allow full width */
+  box-sizing: border-box;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.project-info {
+  padding: 40px 20px 20px 40px;
+  /* Add padding here */
+  width: 100%;
+  /* Full width container, actual text width controlled by children */
+}
+
+.project-header {
+  display: flex;
+  justify-content: flex-start;
+  align-items: baseline;
+  margin-bottom: 10px;
+}
+
+.year {
+  font-size: 1rem;
+  font-weight: normal;
+  margin-right: 10px;
+  width: 50px;
+  /* Fixed width for alignment */
+  flex-shrink: 0;
+}
+
+
+.project-details {
+  /* Legacy max-height/overflow removed - handled by .box-content */
+  max-width: 500px;
+  /* Responsive width */
+  margin-left: 60px;
+  /* Align with title */
+  cursor: pointer;
+  position: relative;
+}
+
+/* Legacy gradient removed */
+
+/* Legacy expanded rule removed */
+
+.project-section h2 {
+  font-size: 1.5rem;
+  margin: 0;
+  /* Removed bottom margin, handled by header */
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.project-section .caption {
+  font-size: 1rem;
+  margin-bottom: 20px;
+  /* Reduced margin */
+  line-height: 1.4;
+  /* Tighter line height */
+}
+
+.project-meta {
+  margin-bottom: 20px;
+  /* Reduced margin */
+  font-size: 0.9rem;
+  /* Slightly smaller */
+  line-height: 1.4;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  /* Smaller columns */
+  gap: 10px;
+  /* Reduced gap */
+}
+
+/* Hide meta in snippet mode */
+.box-content.snippet .project-meta {
+  display: none;
+}
+
+.project-details {
+  /* ... existing styles implicitly ... */
+  transition: opacity 0.3s ease;
+}
+
+.project-details.content-hidden {
+  opacity: 0;
+}
+
+.project-meta {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--text-color);
+  /* Stroke after caption */
+}
+
+.project-meta p {
+  margin: 0;
+}
+
+.slideshow {
+  display: flex;
+  overflow-x: auto;
+  gap: 0;
+  /* No gap */
+  padding-bottom: 0;
+  width: 100%;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  /* Firefox */
+  -ms-overflow-style: none;
+  /* IE 10+ */
+}
+
+.slideshow::-webkit-scrollbar {
+  display: none;
+  /* Safari and Chrome */
+}
+
+.nav-btn {
+  background: none;
+  border: none;
+  font-family: var(--font-main);
+  font-size: 2rem;
+  cursor: pointer;
+  padding: 0;
+  user-select: none;
+  transition: opacity 0.3s ease;
+  z-index: 10;
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 15%;
+  min-width: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  /* White arrows */
+  opacity: 0;
+  /* Hidden by default */
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  /* Optional: shadow for visibility on light images */
+}
+
+.slideshow-container:hover .nav-btn {
+  opacity: 1;
+  /* Show on hover */
+}
+
+.nav-btn.prev {
+  left: 0;
+}
+
+.nav-btn.next {
+  right: 0;
+}
+
+.nav-btn.hidden {
+  opacity: 0 !important;
+  pointer-events: none;
+}
+
+.slideshow-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  overflow: hidden;
+  /* Contain buttons if needed, but slideshow needs to scroll */
+}
+
+.slideshow img,
+.slideshow video {
+  height: auto;
+  width: auto;
+  max-width: 100%;
+  max-height: 90vh;
+  /* Prevent exceeding viewport height */
+  object-fit: contain;
+  border: none;
+  flex-shrink: 0;
+  display: block;
+  margin: 0 auto;
+  /* Center if smaller than container */
+}
+
+/* Desktop styles */
+@media (min-width: 768px) {
+  .draggable img {
+    max-width: 37.5vw;
+    /* Desktop: 25% bigger (30 -> 37.5) */
+    max-height: 37.5vh;
+    /* Desktop: 25% bigger (30 -> 37.5) */
+  }
+
+  .project-section {
+    padding: 0;
+    flex-direction: row;
+    align-items: flex-start;
+    /* Align to top */
+    justify-content: space-between;
+  }
+
+  .project-info {
+    padding: 60px 60px 60px 40px;
+    flex: 0 0 300px;
+    /* Fixed width initially */
+    max-width: 300px;
+    /* Keep the constraint */
+    transition: max-width 0.6s cubic-bezier(0.25, 1, 0.5, 1), flex 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+  }
+
+  .project-section.expanded .project-info {
+    flex: 0 0 50%;
+    max-width: 600px;
+    /* Wider when expanded */
+  }
+
+  .slideshow-container {
+    flex: 1;
+    min-width: 0;
+    /* Allow shrinking for scroll */
+    transition: flex 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+  }
+
+  .slideshow {
+    width: 100%;
+    /* Fill container */
+    overflow-x: auto;
+    /* Ensure images don't overflow during transition */
+  }
+
+  /* Prevent images/videos from resizing during transition */
+  .slideshow img,
+  .slideshow video {
+    height: 90vh;
+    /* Prioritize height */
+    width: auto;
+    /* Allow width to adjust */
+    max-width: none;
+    /* Allow exceeding container */
+    object-fit: contain;
+    margin: 0;
+  }
+
+  .project-section h2 {
+    font-size: 1.5rem;
+  }
+
+  #floating-index {
+    left: 360px;
+    /* Next to hero (20 + 300 + 40) */
+    right: auto;
+  }
+}
+
+/* Order button removed */
+
+.slide-counter {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  background-color: rgba(255, 255, 255, 0.8);
+  color: #000;
+  padding: 5px 10px;
+  border-radius: 0;
+  font-family: var(--font-main);
+  font-size: 1rem;
+  z-index: 20;
+  pointer-events: none;
+  border: 1px solid var(--border-color);
+}
+
+/* Project Navigation Bar */
+#project-nav-bar {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: 40px;
+  /* Set explicit height */
+  margin-top: 0;
+  /* Pull it up into the hero initially */
+  background-color: white;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 0;
+  /* padding handling in height/flex */
+  z-index: 2002;
+  /* Above drag items mostly */
+  border-top: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
+  /* Add bottom border permanently */
+}
+
+.nav-item {
+  font-family: var(--font-main);
+  font-size: 1rem;
+  cursor: pointer;
+  color: var(--text-color);
+  text-transform: uppercase;
+  transition: opacity 0.3s, font-weight 0.3s;
+  padding: 0 10px;
+}
+
+.nav-item:hover {
+  opacity: 0.7;
+}
+
+.nav-item.active {
+  font-weight: bold;
+  text-decoration: none;
+}
+
+/* Highlighted Image */
+.draggable.highlight {
+  z-index: 1500 !important;
+  /* Above other images, below UI (2001) */
+  transform: scale(1.1);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+  border-color: #000;
+}
+
+/* Main Footer */
+#main-footer {
+  height: 40px;
+  padding: 0 20px;
+  border-top: 1px solid var(--border-color);
+  background-color: var(--bg-color);
+  text-align: center;
+  font-family: var(--font-main);
+  font-size: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#main-footer .footer-info p {
+  margin: 5px 0;
+}
+
+#main-footer a {
+  color: var(--text-color);
+  text-decoration: none;
+}
+
+#main-footer a:hover {
+  text-decoration: underline;
+}
+
+/* Mobile Adaptation */
+@media (max-width: 768px) {
+
+  /* Hide draggable gallery */
+  .gallery {
+    display: none;
+  }
+
+  /* Hide sticky navbar */
+  #project-nav-bar {
+    display: none;
+  }
+
+  /* Ensure Hero fits cleanly without them */
+  #hero main {
+    height: 100%;
+    overflow: hidden;
+    /* Prevent any accidental scrolls from hidden elements */
+  }
+}
+
+```
