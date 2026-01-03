@@ -657,11 +657,40 @@ h1 {
   }
 
   /* Ensure Hero fits cleanly without them */
-  #hero main {
-    height: 100%;
-    overflow: hidden;
-    /* Prevent any accidental scrolls from hidden elements */
+  #hero {
+    display: none;
+  }
+
+  #floating-hero {
+    position: relative;
+    top: auto;
+    left: auto;
+    width: 100%;
+    height: auto;
+    border: none;
+    border-bottom: 1px solid var(--border-color);
+    box-sizing: border-box;
+    padding: 20px;
+    margin: 0;
+  }
+
+  /* Reset project info padding for mobile */
+  .project-info {
+    padding: 20px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* Remove left margin from project details on mobile */
+  .project-details {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  /* Ensure slideshows span full width if needed */
+  .slideshow img,
+  .slideshow video {
+    max-height: 50vh;
+    /* Reduced height for mobile context */
   }
 }
-
-```
