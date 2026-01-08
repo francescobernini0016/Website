@@ -36,8 +36,12 @@ document.addEventListener('DOMContentLoaded', () => {
     let mouseX = 0, mouseY = 0;
     let currentX = 0, currentY = 0;
     let velocityX = 0;
-    let animationFrameId;
+    let animationFrameId; // To stop loop if needed, though we usually keep it running if active
     let startMouseX, startMouseY;
+    let isActive = false; // Track if this specific element is active
+
+    // Initialize current positions from style or offset
+    // This needs to be robust if style is empty initially (handled in startup logic)
 
     element.onmousedown = dragMouseDown;
 
@@ -45,78 +49,99 @@ document.addEventListener('DOMContentLoaded', () => {
       e = e || window.event;
       e.preventDefault();
 
+      // Bring to front immediately and permanently
+      highestZIndex++;
+      element.style.zIndex = highestZIndex;
+
+      // Visual feedback
+      element.classList.remove('animating'); // Stop CSS transitions
+      element.style.cursor = 'grabbing';
+
+      // Update state
       isDragging = true;
+      isActive = true;
 
-      // Z-Index Logic: Bring to front (very high) while dragging
-      element.style.zIndex = 4000;
-      element.classList.remove('animating');
-
-      // Initialize current positions from element's current style
+      // Get current position
       currentX = element.offsetLeft;
       currentY = element.offsetTop;
 
-      // The target (mouseX/Y) should start at the current position to prevent jumping
-      mouseX = currentX;
-      mouseY = currentY;
-
-      // Capture start position for click detection (using raw client coords)
-      startMouseX = e.clientX;
-      startMouseY = e.clientY;
-
-      // Calculate offset from mouse to element top-left to keep relative position
+      // Target follows mouse exactly relative to grab point
+      // We calculate the offset from the element's top-left
       const offsetX = e.clientX - currentX;
       const offsetY = e.clientY - currentY;
 
-      document.onmouseup = closeDragElement;
-      document.onmousemove = (event) => {
-        event.preventDefault();
-        mouseX = event.clientX - offsetX;
-        mouseY = event.clientY - offsetY;
-      };
+      // Initialize target (mouseX/Y) to current position so there's no initial jump
+      mouseX = currentX;
+      mouseY = currentY;
 
-      // Start physics loop
-      updatePhysics();
+      // For click detection
+      startMouseX = e.clientX;
+      startMouseY = e.clientY;
+
+      document.onmouseup = closeDragElement;
+      document.onmousemove = elementDrag;
+
+      function elementDrag(e) {
+        e.preventDefault();
+        // Update target position
+        mouseX = e.clientX - offsetX;
+        mouseY = e.clientY - offsetY;
+      }
+
+      // Start the physics loop if not already running
+      if (!animationFrameId) {
+        updatePhysics();
+      }
     }
 
     function updatePhysics() {
-      if (!isDragging) return;
+      if (!isActive) return; // Stop loop if satisfied
 
-      // Inertia: Smoothly interpolate current position to target mouse position
-      // Lerp factor 0.1 gives a nice "heavy" feel
-      const lerpFactor = 0.1;
+      // Physics Parameters
+      // Higher lerp = tighter control (less sloppy), Lower = more weight/lag
+      const lerpFactor = 0.15; // Increased from 0.1 for tighter feel
+
+      // Interpolate
       const nextX = currentX + (mouseX - currentX) * lerpFactor;
       const nextY = currentY + (mouseY - currentY) * lerpFactor;
 
-      // Calculate velocity for sway effect
+      // Velocity for sway
       velocityX = nextX - currentX;
 
+      // Update current
       currentX = nextX;
       currentY = nextY;
 
-      // Apply position
+      // Apply
       element.style.left = currentX + "px";
       element.style.top = currentY + "px";
 
-      // Apply sway rotation based on velocity
-      // Max rotation clamped to avoid flipping
-      // Reduced sway intensity as requested (velocityX * 0.5)
-      const rotation = Math.max(-15, Math.min(15, velocityX * 0.5));
-      const scale = 1.05; // Keep the pop-up scale
+      // Sway Logic
+      // Smoother sway: clamp and reduce intensity
+      const rotation = Math.max(-10, Math.min(10, velocityX * 0.4));
+      const scale = isDragging ? 1.05 : 1.0; // Scale up only when holding
+
       element.style.transform = `rotate(${rotation}deg) scale(${scale})`;
 
-      animationFrameId = requestAnimationFrame(updatePhysics);
+      // Continue loop
+      // We can stop loop when "close enough" and not dragging, but simpler to keep running while interaction is hot
+      // optimization: stop if !isDragging and velocity is near zero
+      if (!isDragging && Math.abs(mouseX - currentX) < 0.1 && Math.abs(mouseY - currentY) < 0.1 && Math.abs(velocityX) < 0.01) {
+        isActive = false; // Stop loop
+        element.style.transform = 'rotate(0deg) scale(1)'; // Ensure clean reset
+        animationFrameId = null;
+      } else {
+        animationFrameId = requestAnimationFrame(updatePhysics);
+      }
     }
 
     function closeDragElement(e) {
       isDragging = false;
       document.onmouseup = null;
       document.onmousemove = null;
-      cancelAnimationFrame(animationFrameId);
+      element.style.cursor = 'grab';
 
-      // Reset rotation and scale smoothly when released
-      element.style.transform = 'rotate(0deg) scale(1)';
-
-      // Check Overlap with UI
+      // Check Overlap with UI (re-use existing logic if possible or re-implement)
       const rect = element.getBoundingClientRect();
       const heroRect = document.getElementById('floating-hero').getBoundingClientRect();
       const indexRect = document.getElementById('floating-index').getBoundingClientRect();
@@ -128,18 +153,16 @@ document.addEventListener('DOMContentLoaded', () => {
           r1.top > r2.bottom);
       }
 
+      // If overlapping UI, push behind
       if (isOverlapping(rect, heroRect) || isOverlapping(rect, indexRect)) {
-        element.style.zIndex = 1000; // Behind UI (2001) but likely in front of background
-      } else {
-        highestZIndex++;
-        element.style.zIndex = highestZIndex; // Restore to top of stack
+        element.style.zIndex = 1000;
       }
+      // Else leave at highestZIndex (already set at mousedown)
 
-      // Check if it was a click (minimal movement)
+      // Click Detection
       if (e) {
         const dist = Math.hypot(e.clientX - startMouseX, e.clientY - startMouseY);
         if (dist < 5) {
-          // It's a click!
           const targetId = element.getAttribute('data-target');
           if (targetId) {
             const targetSection = document.getElementById(targetId);
