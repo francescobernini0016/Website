@@ -62,9 +62,12 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   document.querySelectorAll('.gallery .sticky-note').forEach(note => {
-    note.addEventListener('dblclick', (e) => {
-      if (e.target.closest('a, button, input, canvas, select, textarea')) return;
-      expandNote(note);
+    const handles = note.querySelectorAll('.note-title, .note-header-row');
+    handles.forEach(handle => {
+      handle.addEventListener('dblclick', (e) => {
+        if (e.target.closest('a, button, input, canvas, select, textarea')) return;
+        expandNote(note);
+      });
     });
   });
 
@@ -181,8 +184,13 @@ document.addEventListener('DOMContentLoaded', () => {
       return { x: viewportX - pr.left, y: viewportY - pr.top };
     }
 
-    element.addEventListener('mousedown', onDown);
-    element.addEventListener('touchstart', onDown, { passive: false });
+    // Attach drag to header handles only, but move the whole element
+    const handles = element.querySelectorAll('.note-title, .note-header-row');
+    const targets = handles.length > 0 ? handles : [element];
+    targets.forEach(h => {
+      h.addEventListener('mousedown', onDown);
+      h.addEventListener('touchstart', onDown, { passive: false });
+    });
 
     function onDown(e) {
       if (e.target.closest('a, button, input, canvas, select, textarea')) return;

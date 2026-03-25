@@ -216,7 +216,7 @@ h1 {
   text-align: center;
   border: 1px solid var(--border-color);
   padding: 0;
-  cursor: grab;
+  cursor: default;
   user-select: none;
   transition: box-shadow 0.3s ease, scale 0.3s ease;
 }
@@ -336,18 +336,26 @@ h1 {
   font-weight: bold;
   font-size: 0.95rem;
   text-transform: uppercase;
-  margin-bottom: 10px;
-  padding-bottom: 8px;
+  margin: -16px -18px 10px;
+  padding: 14px 18px;
+  min-height: 44px;
+  box-sizing: border-box;
   border-bottom: 1px solid rgba(0, 0, 0, 0.12);
   cursor: default;
 }
 
-.draggable:active {
+.draggable .note-title,
+.draggable .note-header-row {
+  cursor: grab;
+}
+
+.draggable .note-title:active,
+.draggable .note-header-row:active {
   cursor: grabbing;
 }
 
 .sticky-note .note-body {
-  pointer-events: auto;
+  pointer-events: none;
 }
 
 .sticky-note .note-body a {
@@ -389,8 +397,10 @@ h1 {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 10px;
-  padding-bottom: 8px;
+  margin: -16px -18px 10px;
+  padding: 10px 18px;
+  min-height: 44px;
+  box-sizing: border-box;
   border-bottom: 1px solid rgba(0, 0, 0, 0.12);
   cursor: grab;
 }
@@ -400,8 +410,9 @@ h1 {
 }
 
 .note-header-row .note-title {
-  margin-bottom: 0;
-  padding-bottom: 0;
+  margin: 0;
+  padding: 0;
+  min-height: auto;
   border-bottom: none;
   flex: 1;
   text-align: center;
@@ -413,7 +424,9 @@ h1 {
   font-family: var(--font-main);
   font-size: 0.75rem;
   cursor: pointer;
-  padding: 2px 8px;
+  padding: 6px 12px;
+  min-width: 36px;
+  min-height: 36px;
   pointer-events: auto;
   line-height: 1;
   border-radius: 2px;
