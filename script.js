@@ -30,8 +30,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function expandNote(note) {
     if (expandedNote) return;
-    const rect = note.getBoundingClientRect();
-    const ratio = rect.width / rect.height;
     savedPosition = { top: note.style.top, left: note.style.left, zIndex: note.style.zIndex, width: note.style.width };
     expandedNote = note;
 
@@ -39,14 +37,8 @@ document.addEventListener('DOMContentLoaded', () => {
     activeOverlay.classList.add('note-overlay');
     document.body.appendChild(activeOverlay);
 
-    // Scale up keeping aspect ratio, capped by viewport
-    const maxH = window.innerHeight * 0.714;
-    const maxW = window.innerWidth * 0.9;
-    let newH = maxH;
-    let newW = newH * ratio;
-    if (newW > maxW) { newW = maxW; newH = newW / ratio; }
-    note.style.width = newW + 'px';
-
+    const maxW = Math.min(600, window.innerWidth * 0.9);
+    note.style.width = maxW + 'px';
     note.classList.add('note-expanded');
 
     activeOverlay.addEventListener('click', collapseNote);
@@ -68,6 +60,13 @@ document.addEventListener('DOMContentLoaded', () => {
     expandedNote = null;
     savedPosition = null;
   }
+
+  document.querySelectorAll('.gallery .sticky-note').forEach(note => {
+    note.addEventListener('dblclick', (e) => {
+      if (e.target.closest('a, button, input, canvas, select, textarea')) return;
+      expandNote(note);
+    });
+  });
 
   // Grid organize toggle
   let isGridded = false;
@@ -155,16 +154,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  document.querySelectorAll('.sticky-note').forEach(note => {
-    const handles = note.querySelectorAll('.note-title, .note-header-row');
-    if (handles.length === 0) return;
-    handles.forEach(handle => {
-      handle.addEventListener('dblclick', (e) => {
-        if (e.target.tagName === 'A' || e.target.tagName === 'BUTTON') return;
-        expandNote(note);
-      });
-    });
-  });
 
   function isOverlapping(r1, r2) {
     return !(r1.right < r2.left ||
@@ -174,113 +163,101 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function makeDraggable(element) {
-    let isDragging = false;
-    let mouseX = 0, mouseY = 0;
+    let animFrameId = null;
+    let targetX = 0, targetY = 0;
     let currentX = 0, currentY = 0;
     let velocityX = 0;
-    let animationFrameId;
-    let startMouseX, startMouseY;
-    let isActive = false;
+    let dragging = false;
 
-    // Only drag from title / header row
-    const dragHandles = element.querySelectorAll('.note-title, .note-header-row');
-    if (dragHandles.length > 0) {
-      dragHandles.forEach(h => { h.onmousedown = dragMouseDown; h.ontouchstart = dragMouseDown; });
-    } else {
-      element.onmousedown = dragMouseDown;
+    function getXY(e) {
+      if (e.touches && e.touches.length) return { x: e.touches[0].clientX, y: e.touches[0].clientY };
+      if (e.changedTouches && e.changedTouches.length) return { x: e.changedTouches[0].clientX, y: e.changedTouches[0].clientY };
+      return { x: e.clientX, y: e.clientY };
     }
 
-    function dragMouseDown(e) {
-      e = e || window.event;
+    function toLocal(viewportX, viewportY) {
+      const parent = element.offsetParent || document.body;
+      const pr = parent.getBoundingClientRect();
+      return { x: viewportX - pr.left, y: viewportY - pr.top };
+    }
+
+    element.addEventListener('mousedown', onDown);
+    element.addEventListener('touchstart', onDown, { passive: false });
+
+    function onDown(e) {
+      if (e.target.closest('a, button, input, canvas, select, textarea')) return;
+
       e.preventDefault();
+      e.stopPropagation();
+
+      const ptr = getXY(e);
+      const rect = element.getBoundingClientRect();
+      const grabX = ptr.x - rect.left;
+      const grabY = ptr.y - rect.top;
 
       highestZIndex++;
       element.style.zIndex = highestZIndex;
       element.classList.remove('animating');
+      element.classList.add('is-dragging');
 
-      isDragging = false;
-      isActive = true;
-      let dragStarted = false;
+      // Init position from current local coords
+      const startLocal = toLocal(rect.left, rect.top);
+      currentX = startLocal.x;
+      currentY = startLocal.y;
+      targetX = currentX;
+      targetY = currentY;
+      velocityX = 0;
+      dragging = true;
 
-      currentX = element.offsetLeft;
-      currentY = element.offsetTop;
-
-      const offsetX = e.clientX - currentX;
-      const offsetY = e.clientY - currentY;
-
-      mouseX = currentX;
-      mouseY = currentY;
-
-      startMouseX = e.clientX;
-      startMouseY = e.clientY;
-
-      document.onmouseup = closeDragElement;
-      document.onmousemove = (e) => {
-        e.preventDefault();
-        const dist = Math.hypot(e.clientX - startMouseX, e.clientY - startMouseY);
-        if (!dragStarted && dist > 4) {
-          dragStarted = true;
-          isDragging = true;
-          element.classList.add('is-dragging');
-        }
-        mouseX = e.clientX - offsetX;
-        mouseY = e.clientY - offsetY;
-      };
-
-      if (!animationFrameId) {
-        updatePhysics();
+      function onMove(ev) {
+        ev.preventDefault();
+        const p = getXY(ev);
+        const local = toLocal(p.x - grabX, p.y - grabY);
+        targetX = local.x;
+        targetY = local.y;
       }
+
+      function onUp() {
+        document.removeEventListener('mousemove', onMove);
+        document.removeEventListener('mouseup', onUp);
+        document.removeEventListener('touchmove', onMove);
+        document.removeEventListener('touchend', onUp);
+        dragging = false;
+        element.classList.remove('is-dragging');
+      }
+
+      document.addEventListener('mousemove', onMove);
+      document.addEventListener('mouseup', onUp);
+      document.addEventListener('touchmove', onMove, { passive: false });
+      document.addEventListener('touchend', onUp);
+
+      if (!animFrameId) animFrameId = requestAnimationFrame(tick);
     }
 
-    function updatePhysics() {
-      if (!isActive) return;
+    function tick() {
+      const lerp = 0.18;
+      const prevX = currentX;
+      currentX += (targetX - currentX) * lerp;
+      currentY += (targetY - currentY) * lerp;
+      velocityX = currentX - prevX;
 
-      const lerpFactor = 0.15;
+      element.style.left = currentX + 'px';
+      element.style.top = currentY + 'px';
 
-      const nextX = currentX + (mouseX - currentX) * lerpFactor;
-      const nextY = currentY + (mouseY - currentY) * lerpFactor;
-
-      velocityX = nextX - currentX;
-      currentX = nextX;
-      currentY = nextY;
-
-      element.style.left = currentX + "px";
-      element.style.top = currentY + "px";
-
-      if (isDragging) {
-        const rotation = Math.max(-10, Math.min(10, velocityX * 0.4));
-        element.style.transform = `rotate(${rotation}deg)`;
+      if (dragging) {
+        const rot = Math.max(-10, Math.min(10, velocityX * 0.4));
+        element.style.transform = `rotate(${rot}deg)`;
       }
 
-      if (!isDragging && Math.abs(mouseX - currentX) < 0.1 && Math.abs(mouseY - currentY) < 0.1 && Math.abs(velocityX) < 0.01) {
-        isActive = false;
+      const settled = !dragging
+        && Math.abs(targetX - currentX) < 0.5
+        && Math.abs(targetY - currentY) < 0.5;
+
+      if (settled) {
         element.style.transform = 'none';
-        animationFrameId = null;
+        animFrameId = null;
       } else {
-        animationFrameId = requestAnimationFrame(updatePhysics);
-      }
-    }
-
-    function closeDragElement(e) {
-      isDragging = false;
-      element.classList.remove('is-dragging');
-      document.onmouseup = null;
-      document.onmousemove = null;
-
-      const rect = element.getBoundingClientRect();
-      const heroRect = document.getElementById('floating-hero').getBoundingClientRect();
-      const indexRect = document.getElementById('floating-index').getBoundingClientRect();
-
-      if (isOverlapping(rect, heroRect) || isOverlapping(rect, indexRect)) {
-        element.style.zIndex = 1000;
-      }
-
-      // Allow clicks on links inside sticky notes
-      if (e) {
-        const dist = Math.hypot(e.clientX - startMouseX, e.clientY - startMouseY);
-        if (dist < 5 && e.target.tagName === 'A') {
-          e.target.click();
-        }
+        animFrameId = requestAnimationFrame(tick);
       }
     }
   }
@@ -352,33 +329,17 @@ document.addEventListener('DOMContentLoaded', () => {
     indexListContainer.classList.toggle('collapsed');
   });
 
-  // Are.na gallery
+  // Are.na gallery (horizontal scroll like photo gallery)
   const arenaNote = document.querySelector('.sticky-arena');
   if (arenaNote) {
     const galleryEl = arenaNote.querySelector('.arena-gallery');
-    const captionEl = arenaNote.querySelector('.arena-caption');
     const counterEl = arenaNote.querySelector('.arena-counter');
-    const prevBtn = arenaNote.querySelector('.arena-prev');
-    const nextBtn = arenaNote.querySelector('.arena-next');
-    let arenaBlocks = [];
-    let arenaIndex = 0;
 
-    function showArenaBlock(idx) {
-      if (arenaBlocks.length === 0) return;
-      arenaIndex = idx;
-      const block = arenaBlocks[idx];
-      const src = block.image.large ? block.image.large.src : block.image.src;
-      galleryEl.innerHTML = `<img src="${src}" alt="${block.title || 'Are.na'}">`;
-
-      const blockUrl = `https://www.are.na/block/${block.id}`;
-      const sourceUrl = block.source && block.source.url ? block.source.url : null;
-      let links = `<a href="${blockUrl}" target="_blank">are.na/block/${block.id}</a>`;
-      if (sourceUrl) {
-        const hostname = new URL(sourceUrl).hostname.replace('www.', '');
-        links += ` · <a href="${sourceUrl}" target="_blank">${hostname}</a>`;
-      }
-      captionEl.innerHTML = (block.title || '') + (block.title ? '<br>' : '') + links;
-      counterEl.textContent = `${idx + 1} / ${arenaBlocks.length}`;
+    function updateArenaCounter() {
+      const imgs = galleryEl.querySelectorAll('.arena-slide');
+      if (imgs.length <= 1) { counterEl.textContent = ''; return; }
+      const scrollIdx = Math.round(galleryEl.scrollLeft / (imgs[0].offsetWidth + 6));
+      counterEl.textContent = `${scrollIdx + 1} / ${imgs.length}`;
     }
 
     function fetchArena() {
@@ -386,25 +347,26 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(r => r.json())
         .then(res => {
           const blocks = res.data || res;
-          arenaBlocks = blocks.filter(b => b.type === 'Image' && b.image).reverse();
-          if (arenaBlocks.length === 0) return;
-          showArenaBlock(0);
+          const imageBlocks = blocks.filter(b => b.type === 'Image' && b.image).reverse();
+          if (imageBlocks.length === 0) return;
+
+          galleryEl.innerHTML = '';
+          imageBlocks.forEach(block => {
+            const src = block.image.large ? block.image.large.src : block.image.src;
+            const slide = document.createElement('div');
+            slide.classList.add('arena-slide');
+            slide.innerHTML = `<img src="${src}" alt="${block.title || 'Are.na'}">`;
+            galleryEl.appendChild(slide);
+          });
+
+          updateArenaCounter();
         })
         .catch(() => {
           galleryEl.innerHTML = '<div class="arena-loading">could not load</div>';
         });
     }
 
-    prevBtn.addEventListener('click', () => {
-      if (arenaBlocks.length === 0) return;
-      showArenaBlock((arenaIndex - 1 + arenaBlocks.length) % arenaBlocks.length);
-    });
-
-    nextBtn.addEventListener('click', () => {
-      if (arenaBlocks.length === 0) return;
-      showArenaBlock((arenaIndex + 1) % arenaBlocks.length);
-    });
-
+    galleryEl.addEventListener('scroll', updateArenaCounter);
     fetchArena();
     setInterval(fetchArena, 60000);
   }
