@@ -11,26 +11,22 @@
 
 <body>
 
-  <div id="floating-hero">
-    <div class="card-header">
-      <h1 id="hero-title-toggle">FRANCESCO BERNINI</h1>
-    </div>
-    <div id="hero-content">
-      <div class="box-content snippet" id="bio-content">
-        <section id="bio" class="paragraph">
-          <p>Is a designer based in Italy, graduated in Graphic Design and Visual Communication at
-            ISIA
-            Urbino. His practice focuses on the application of experimental typography across editorial production,
-            physical media, visual and web design. A lifelong interest in music has developed into a keen eye for
-            contemporary experimentations that lingers the realms of sound and visual culture. He's also rarely seen
-            without a hat, for some reason.</p>
-        </section>
-      </div>
-
-      <section id="contact" class="paragraph">
+  <div id="floating-hero" class="sticky-note" style="--note-color: #f1f1f1;">
+    <div class="note-title">FRANCESCO BERNINI</div>
+    <div class="note-body">
+      <section id="bio">
+        <p>Is a designer based in Italy, graduated in Graphic Design and Visual Communication at
+          ISIA
+          Urbino. His practice focuses on the application of experimental typography across editorial production,
+          physical media, visual and web design. A lifelong interest in music has developed into a keen eye for
+          contemporary experimentations that lingers the realms of sound and visual culture. He's also rarely seen
+          without a hat, for some reason.</p>
+      </section>
+      <section id="contact">
         <p><a href="mailto:fra00016@gmail.com">fra00016@gmail.com</a>
-          <br>+3774543562<br>
-          <a href="https://instagram.com/the.salmone" target="_blank">@the.salmone</a>
+          <br><a href="tel:+393774543562">+3774543562</a>
+          <br><a href="https://instagram.com/the.salmone" target="_blank">Instagram</a>
+          <br><a href="https://typo.social/@the_salmone" target="_blank" rel="me">Mastodon</a>
         </p>
       </section>
     </div>
@@ -48,39 +44,132 @@
 
   <section id="hero">
     <main>
-      <!-- Draggable Images -->
       <div class="gallery">
-        <!-- Project 1: One Stroke -->
-        <div class="draggable" data-target="project-1" style="top: 10%; left: 10%;">
-          <img src="imgs/projects/01_one_stroke/1.jpg" alt="One Stroke">
+
+        <!-- Sticky Note: Recipe -->
+        <div class="draggable sticky-note" style="top: 8%; left: 8%; --note-color: #FFF9C4;">
+          <div class="note-title">Stufato di Legumi</div>
+          <div class="note-body">
+            <p><strong>Ingredienti (per 2 persone):</strong></p>
+            <ul>
+              <li><strong>Olio EVO:</strong> 40 ml</li>
+              <li><strong>Cipolla:</strong> 1 grossa</li>
+              <li><strong>Spezie:</strong> 1 cucchiaino di cumino, &frac12; di zenzero, 2 di curcuma, 1 puntina di cannella</li>
+              <li><strong>Aglio:</strong> 1 spicchio</li>
+              <li><strong>Pasta di peperoncino:</strong> &frac12; cucchiaino</li>
+              <li><strong>Fagioli rossi:</strong> 200 g</li>
+              <li><strong>Ceci:</strong> 200 g</li>
+              <li><strong>Prugne della California:</strong> 5 o 6</li>
+              <li><strong>Acqua:</strong> &frac12; bicchiere</li>
+              <li><strong>Condimenti:</strong> sale, pepe, scorza di limone q.b.</li>
+            </ul>
+            <p><strong>Procedimento:</strong></p>
+            <ol>
+              <li>Cipolla a fette in casseruola con olio e spezie. Aggiungere sale subito.</li>
+              <li>Aglio tritato + pasta di peperoncino. Tostare ~1 min.</li>
+              <li>Aggiungere ceci, fagioli, acqua di cottura, prugne a pezzetti e acqua.</li>
+              <li>Cuocere ~10 min a fuoco medio fino a crema densa.</li>
+              <li>Impiattare con prugne intere e scorza di limone.</li>
+            </ol>
+          </div>
         </div>
 
-        <!-- Project 2: Dep Se -->
-        <div class="draggable" data-target="project-2" style="top: 20%; left: 60%;">
-          <img src="imgs/projects/02_dep_se/1.jpg" alt="Dep Se">
+        <!-- Sticky Note: Cars -->
+        <div class="draggable sticky-note" style="top: 15%; left: 55%; --note-color: #E3F2FD;">
+          <div class="note-title">Cars I Like</div>
+          <div class="note-body">
+            <ul>
+              <li><a href="https://en.wikipedia.org/wiki/Nissan_Micra#K11" target="_blank">Nissan Micra K11</a></li>
+              <li><a href="https://en.wikipedia.org/wiki/Toyota_Previa" target="_blank">Toyota Estima 1990</a></li>
+              <li><a href="https://en.wikipedia.org/wiki/Toyota_MR2#W10" target="_blank">Toyota MR2 Supercharged</a></li>
+              <li><a href="https://en.wikipedia.org/wiki/Fiat_500_(2007)" target="_blank">Fiat 500 Suite</a></li>
+              <li><a href="https://en.wikipedia.org/wiki/Renault_Twingo#First_generation" target="_blank">Renault Twingo Prima Serie</a></li>
+              <li><a href="https://www.google.com/search?udm=2&q=ford+taurus+3" target="_blank">Ford Taurus III</a></li>
+              <li><a href="https://en.wikipedia.org/wiki/Toyota_MR2" target="_blank">Toyota MR2</a></li>
+            </ul>
+          </div>
         </div>
 
-        <!-- Project 3: Processed Shore -->
-        <div class="draggable" data-target="project-3" style="top: 50%; left: 20%;">
-          <img src="imgs/projects/03_processed_shore/1.jpg" alt="Processed Shore">
+        <!-- Sticky Note: Books -->
+        <div class="draggable sticky-note" style="top: 45%; left: 25%; --note-color: #FCE4EC;">
+          <div class="note-title">Books I Like</div>
+          <div class="note-body">
+            <ul>
+              <li><a href="https://archive.org/details/amiga-abasi-c-reference-manual" target="_blank">Amiga BASIC Reference Manual</a></li>
+            </ul>
+          </div>
         </div>
 
-        <!-- Project 4: Un Giorno -->
-        <div class="draggable" data-target="project-4" style="top: 60%; left: 70%;">
-          <img src="imgs/projects/04_un_giorno/1.jpg" alt="Un Giorno">
+        <!-- Sticky Note: Photo Gallery -->
+        <div class="draggable sticky-note sticky-gallery" style="top: 55%; left: 60%; --note-color: #E8F5E9;">
+          <div class="note-header-row">
+            <button class="gallery-nav-btn gallery-prev-date" aria-label="Previous gallery">&larr;</button>
+            <div class="note-title gallery-date-title">22.03.2026</div>
+            <button class="gallery-nav-btn gallery-next-date" aria-label="Next gallery">&rarr;</button>
+          </div>
+          <div class="note-body">
+            <div class="note-gallery-wrap">
+              <!-- Gallery: 02.11.2025 -->
+              <div class="note-gallery" data-gallery="02.11.2025" style="display: none;">
+                <div class="note-gallery-img"><img src="imgs/gallery/02-11-2025/1.jpg" alt="02.11.2025 - 1"></div>
+              </div>
+              <!-- Gallery: 22.03.2026 -->
+              <div class="note-gallery" data-gallery="22.03.2026">
+                <div class="note-gallery-img"><img src="imgs/gallery/22-03-2026/1.jpg" alt="22.03.2026 - 1"></div>
+                <div class="note-gallery-img"><img src="imgs/gallery/22-03-2026/2.jpg" alt="22.03.2026 - 2"></div>
+                <div class="note-gallery-img"><img src="imgs/gallery/22-03-2026/3.jpg" alt="22.03.2026 - 3"></div>
+                <div class="note-gallery-img"><img src="imgs/gallery/22-03-2026/4.jpg" alt="22.03.2026 - 4"></div>
+                <div class="note-gallery-img"><img src="imgs/gallery/22-03-2026/5.jpg" alt="22.03.2026 - 5"></div>
+              </div>
+              <!-- Gallery: 25.03.2026 -->
+              <div class="note-gallery" data-gallery="25.03.2026" style="display: none;">
+                <div class="note-gallery-img"><img src="imgs/gallery/25-03-2026/1.jpg" alt="25.03.2026 - 1"></div>
+              </div>
+            </div>
+            <div class="note-gallery-counter"></div>
+          </div>
         </div>
 
-        <!-- Project 5: Physical Words -->
-        <div class="draggable" data-target="project-5" style="top: 30%; left: 40%;">
-          <img src="imgs/projects/05_physical_words/2.jpg" alt="Physical Words">
+        <!-- Sticky Note: Are.na -->
+        <div class="draggable sticky-note sticky-arena" style="top: 35%; left: 45%; --note-color: #F3E5F5;">
+          <div class="note-header-row">
+            <button class="gallery-nav-btn arena-prev" aria-label="Previous">&larr;</button>
+            <div class="note-title">
+              <a href="https://www.are.na/francesco-bernini/two-zero-two-six-2m8-hk_mexy" target="_blank" class="arena-channel-link">Are.na / 2026</a>
+            </div>
+            <button class="gallery-nav-btn arena-next" aria-label="Next">&rarr;</button>
+          </div>
+          <div class="note-body">
+            <div class="arena-gallery">
+              <div class="arena-loading">loading...</div>
+            </div>
+            <div class="arena-caption"></div>
+            <div class="arena-counter"></div>
+          </div>
         </div>
+
+        <!-- Sticky Note: Pong -->
+        <div class="draggable sticky-note sticky-pong" style="top: 10%; left: 35%; --note-color: #E0E0E0;">
+          <div class="note-title">Pong</div>
+          <div class="note-body">
+            <div class="pong-score"><span id="pong-p1">0</span> : <span id="pong-p2">0</span></div>
+            <canvas id="pong-canvas" width="260" height="340"></canvas>
+            <div class="pong-controls">
+              <button id="pong-start" class="pong-btn" aria-label="Start">&#9654;</button>
+              <button id="pong-stop" class="pong-btn" disabled aria-label="Stop">&#9632;</button>
+              <button id="pong-restart" class="pong-btn" aria-label="Restart">&#8635;</button>
+            </div>
+            <div class="pong-hint">move mouse or touch to play</div>
+          </div>
+        </div>
+
       </div>
-
-      <!-- Order button removed -->
+      <div id="hero-ui">
+        <span class="hero-hint">Double click header to highlight</span>
+        <button id="grid-btn" class="hero-action-btn">Organize</button>
+      </div>
     </main>
   </section>
-  <div id="project-nav-bar"></div>
-
   <div id="projects-container">
     <!-- Project 1 -->
     <article id="project-1" class="project-section">
@@ -217,7 +306,7 @@
             interest as reflected in Italian media.</p>
           <div class="project-meta">
             <p><strong>ISIA Urbino</strong><br>Editorial Design Course</p>
-            <p><strong>Supervised by</strong><br>Note due to lack of info placeholder</p>
+            <p><strong>Supervised by</strong><br>Valerio Di Lucente</p>
             <p>100 pages, 28x40 cm</p>
             <p><strong>Typeset in:</strong><br>Times New Roman,<br>Arial</p>
           </div>
@@ -266,12 +355,15 @@
   </div>
 
   <footer id="main-footer">
-    <div class="footer-info">
-      <span>FRANCESCO BERNINI, 2025</span>
-      <span class="separator">/</span>
+    <div class="footer-left">
+      <span class="footer-name">FRANCESCO BERNINI</span>
+      <span class="footer-year">2025</span>
+    </div>
+    <div class="footer-right">
       <a href="mailto:fra00016@gmail.com">fra00016@gmail.com</a>
-      <span class="separator">/</span>
-      <span>+3774543562</span>
+      <a href="tel:+393774543562">+3774543562</a>
+      <a href="https://instagram.com/the.salmone" target="_blank">Instagram</a>
+      <a href="https://typo.social/@the_salmone" target="_blank" rel="me">Mastodon</a>
     </div>
   </footer>
 
