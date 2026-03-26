@@ -244,11 +244,11 @@ h1 {
 .sticky-note {
   background-color: var(--note-color, #FFF9C4);
   border: 1px solid rgba(0, 0, 0, 0.1);
-  padding: 16px 18px;
-  width: 260px;
+  padding: clamp(16px, 1.2vw, 24px) clamp(18px, 1.3vw, 28px);
+  width: clamp(260px, 18vw, 400px);
   max-height: 50vh;
   overflow-y: auto;
-  font-size: 0.8rem;
+  font-size: clamp(0.8rem, 0.6rem + 0.25vw, 1.05rem);
   line-height: 1.45;
   box-shadow: 2px 3px 8px rgba(0, 0, 0, 0.08);
   transition: none;
@@ -334,10 +334,10 @@ h1 {
 
 .sticky-note .note-title {
   font-weight: bold;
-  font-size: 0.95rem;
+  font-size: clamp(0.95rem, 0.75rem + 0.25vw, 1.2rem);
   text-transform: uppercase;
-  margin: -16px -18px 10px;
-  padding: 14px 18px;
+  margin: calc(-1 * clamp(16px, 1.2vw, 24px)) calc(-1 * clamp(18px, 1.3vw, 28px)) 10px;
+  padding: clamp(14px, 1vw, 20px) clamp(18px, 1.3vw, 28px);
   min-height: 44px;
   box-sizing: border-box;
   border-bottom: 1px solid rgba(0, 0, 0, 0.12);
@@ -390,15 +390,15 @@ h1 {
 
 /* Photo Gallery Sticky Note */
 .sticky-gallery {
-  width: 420px;
+  width: clamp(420px, 28vw, 580px);
 }
 
 .note-header-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin: -16px -18px 10px;
-  padding: 10px 18px;
+  margin: calc(-1 * clamp(16px, 1.2vw, 24px)) calc(-1 * clamp(18px, 1.3vw, 28px)) 10px;
+  padding: clamp(10px, 0.7vw, 16px) clamp(18px, 1.3vw, 28px);
   min-height: 44px;
   box-sizing: border-box;
   border-bottom: 1px solid rgba(0, 0, 0, 0.12);
@@ -460,8 +460,8 @@ h1 {
 
 .note-gallery-img img {
   display: block;
-  width: 385px;
-  height: 290px;
+  width: clamp(385px, 26vw, 540px);
+  height: clamp(290px, 19vw, 400px);
   object-fit: cover;
   pointer-events: none;
 }
@@ -475,7 +475,7 @@ h1 {
 
 /* Are.na Sticky Note */
 .sticky-arena {
-  width: 420px;
+  width: clamp(420px, 28vw, 580px);
 }
 
 .sticky-arena .note-title {
@@ -512,8 +512,8 @@ h1 {
 
 .arena-slide img {
   display: block;
-  width: 385px;
-  height: 290px;
+  width: clamp(385px, 26vw, 540px);
+  height: clamp(290px, 19vw, 400px);
   object-fit: cover;
   pointer-events: none;
 }
@@ -563,7 +563,7 @@ h1 {
 
 /* Pong Sticky Note */
 .sticky-pong {
-  width: 296px;
+  width: clamp(296px, 20vw, 420px);
 }
 
 .sticky-pong .note-body {
@@ -817,23 +817,17 @@ h1 {
   }
 
   .sticky-note {
-    width: 280px;
     max-height: 60vh;
   }
 
-  .sticky-gallery,
-  .sticky-arena {
-    width: 320px;
-  }
-
   .note-gallery-img img {
-    width: 283px;
-    height: 210px;
+    width: calc(100% - 4px);
+    height: clamp(210px, 15vw, 300px);
   }
 
   .arena-slide img {
-    width: 283px;
-    height: 210px;
+    width: calc(100% - 4px);
+    height: clamp(210px, 15vw, 300px);
   }
 
   #hero-ui {
@@ -868,10 +862,6 @@ h1 {
   .draggable img {
     max-width: 37.5vw;
     max-height: 37.5vh;
-  }
-
-  .sticky-note {
-    width: 280px;
   }
 
   .project-section {
