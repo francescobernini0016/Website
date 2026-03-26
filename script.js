@@ -242,6 +242,8 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!animFrameId) animFrameId = requestAnimationFrame(tick);
     }
 
+    let currentRot = 0;
+
     function tick() {
       const lerp = 0.18;
       const prevX = currentX;
@@ -253,13 +255,23 @@ document.addEventListener('DOMContentLoaded', () => {
       element.style.top = currentY + 'px';
 
       if (dragging) {
-        const rot = Math.max(-10, Math.min(10, velocityX * 0.4));
-        element.style.transform = `rotate(${rot}deg)`;
+        const targetRot = Math.max(-10, Math.min(10, velocityX * 0.4));
+        currentRot += (targetRot - currentRot) * 0.3;
+      } else {
+        currentRot += (0 - currentRot) * 0.08;
+      }
+
+      if (Math.abs(currentRot) > 0.05) {
+        element.style.transform = `rotate(${currentRot}deg)`;
+      } else {
+        currentRot = 0;
+        element.style.transform = 'none';
       }
 
       const settled = !dragging
         && Math.abs(targetX - currentX) < 0.5
-        && Math.abs(targetY - currentY) < 0.5;
+        && Math.abs(targetY - currentY) < 0.5
+        && Math.abs(currentRot) < 0.05;
 
       if (settled) {
         element.style.transform = 'none';
@@ -427,31 +439,41 @@ document.addEventListener('DOMContentLoaded', () => {
   const pongCanvas = document.getElementById('pong-canvas');
   if (pongCanvas) {
     const ctx = pongCanvas.getContext('2d');
-    const W = pongCanvas.width;
-    const H = pongCanvas.height;
-    const paddleW = 50, paddleH = 6, ballR = 5;
-    let p1x = W / 2, p2x = W / 2;
-    let bx = W / 2, by = H / 2;
-    let bvx = 0, bvy = 0;
+    const paddleH = 6, ballR = 5;
+    let W, H, paddleW;
+    let p1x, p2x;
+    let bx, by, bvx = 0, bvy = 0;
     let s1 = 0, s2 = 0;
-    let mouseX = W / 2;
+    let mouseX;
     let running = false;
-    const s1El = document.getElementById('pong-p1');
-    const s2El = document.getElementById('pong-p2');
     const startBtn = document.getElementById('pong-start');
     const stopBtn = document.getElementById('pong-stop');
     const restartBtn = document.getElementById('pong-restart');
 
+    function sizePong() {
+      const rect = pongCanvas.getBoundingClientRect();
+      const cw = Math.round(rect.width);
+      const ch = Math.round(rect.height);
+      if (cw < 1 || ch < 1) return;
+      pongCanvas.width = cw;
+      pongCanvas.height = ch;
+      W = cw;
+      H = ch;
+      paddleW = Math.round(W * 0.28);
+      if (mouseX === undefined) mouseX = W / 2;
+      if (p1x === undefined) { p1x = W / 2; p2x = W / 2; bx = W / 2; by = H / 2; }
+      drawFrame();
+    }
+
     function resetBall(dir) {
       bx = W / 2; by = H / 2;
-      bvx = (Math.random() > 0.5 ? 1 : -1) * 2.5;
-      bvy = dir * 3;
+      bvx = (Math.random() > 0.5 ? 1 : -1) * 1.8;
+      bvy = dir * 2.2;
     }
 
     function fullReset() {
       running = false;
       s1 = 0; s2 = 0;
-      s1El.textContent = '0'; s2El.textContent = '0';
       p1x = W / 2; p2x = W / 2;
       bx = W / 2; by = H / 2;
       bvx = 0; bvy = 0;
@@ -504,6 +526,13 @@ document.addEventListener('DOMContentLoaded', () => {
       ctx.stroke();
       ctx.setLineDash([]);
 
+      // Score on canvas
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.25)';
+      ctx.font = 'bold ' + Math.round(H * 0.12) + 'px var(--font-main, sans-serif)';
+      ctx.textAlign = 'center';
+      ctx.fillText(s1, W / 2, H * 0.62);
+      ctx.fillText(s2, W / 2, H * 0.42);
+
       // Paddles
       ctx.fillStyle = '#fff';
       ctx.fillRect(p1x - paddleW / 2, H - paddleH - 8, paddleW, paddleH);
@@ -517,13 +546,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function pongLoop() {
       if (running) {
-        // Player paddle
-        p1x += (mouseX - p1x) * 0.25;
+        // Player paddle — snappier
+        p1x += (mouseX - p1x) * 0.35;
         p1x = Math.max(paddleW / 2, Math.min(W - paddleW / 2, p1x));
 
-        // AI paddle
+        // AI paddle — slower & dumber
         const aiTarget = bx + (bvy < 0 ? bvx * ((paddleH + 10 - by) / (bvy || 1)) : 0);
-        p2x += (aiTarget - p2x) * 0.06;
+        p2x += (aiTarget - p2x) * 0.035;
         p2x = Math.max(paddleW / 2, Math.min(W - paddleW / 2, p2x));
 
         // Ball
@@ -536,7 +565,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (by + ballR >= H - paddleH - 8 && bvy > 0) {
           if (bx > p1x - paddleW / 2 - ballR && bx < p1x + paddleW / 2 + ballR) {
             bvy = -bvy;
-            bvx += (bx - p1x) * 0.1;
+            bvx += (bx - p1x) * 0.08;
             by = H - paddleH - 8 - ballR;
           }
         }
@@ -545,17 +574,17 @@ document.addEventListener('DOMContentLoaded', () => {
         if (by - ballR <= paddleH + 8 && bvy < 0) {
           if (bx > p2x - paddleW / 2 - ballR && bx < p2x + paddleW / 2 + ballR) {
             bvy = -bvy;
-            bvx += (bx - p2x) * 0.1;
+            bvx += (bx - p2x) * 0.08;
             by = paddleH + 8 + ballR;
           }
         }
 
         // Score
-        if (by > H + ballR) { s2++; s2El.textContent = s2; resetBall(-1); }
-        if (by < -ballR) { s1++; s1El.textContent = s1; resetBall(1); }
+        if (by > H + ballR) { s2++; resetBall(-1); }
+        if (by < -ballR) { s1++; resetBall(1); }
 
-        // Speed cap
-        bvx = Math.max(-6, Math.min(6, bvx));
+        // Speed cap — lower
+        bvx = Math.max(-4, Math.min(4, bvx));
 
         drawFrame();
       }
@@ -563,8 +592,8 @@ document.addEventListener('DOMContentLoaded', () => {
       requestAnimationFrame(pongLoop);
     }
 
-    // Draw initial stopped frame
-    drawFrame();
+    sizePong();
+    window.addEventListener('resize', sizePong);
     pongLoop();
   }
 
