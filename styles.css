@@ -1,9 +1,23 @@
+@font-face {
+  font-family: 'ApfelGrotezk';
+  src: url('ApfelGrotezk-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'ApfelGrotezk';
+  src: url('ApfelGrotezk-Fett.woff') format('woff');
+  font-weight: bold;
+  font-style: normal;
+}
+
 :root {
   --bg-color: #FFFFFF;
   --text-color: #000000;
   --card-bg: #f1f1f1;
   --border-color: #000000;
-  --font-main: Arial, sans-serif;
+  --font-main: 'ApfelGrotezk', sans-serif;
 }
 
 /* General styles */
