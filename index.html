@@ -12,7 +12,7 @@
 <body>
 
   <div id="floating-hero" class="sticky-note" style="--note-color: #f1f1f1;">
-    <div class="note-title">FRANCESCO BERNINI</div>
+    <div class="note-title">Francesco Bernini</div>
     <div class="note-body">
       <section id="bio">
         <p>Is a designer based in Italy, graduated in Graphic Design and Visual Communication at
@@ -43,6 +43,15 @@
   </div>
 
   <section id="hero">
+    <div id="hero-bg">
+      <div id="hero-bg-bio">Francesco Bernini is a designer based in Italy, graduated in Graphic Design and Visual Communication at ISIA Urbino. His practice focuses on the application of experimental typography across editorial production, physical media, visual and web design. A lifelong interest in music has developed into a keen eye for contemporary experimentations that lingers the realms of sound and visual culture. He's also rarely seen without a hat, for some reason.</div>
+      <div id="hero-bg-contacts">
+        <a href="mailto:fra00016@gmail.com">fra00016@gmail.com</a>
+        <a href="https://instagram.com/the.salmone" target="_blank">Instagram</a>
+        <a href="https://typo.social/@the_salmone" target="_blank" rel="me">Mastodon</a>
+        <a href="tel:+393774543562">+3774543562</a>
+      </div>
+    </div>
     <main>
       <div class="gallery">
 
@@ -132,8 +141,12 @@
 
         <!-- Sticky Note: Are.na -->
         <div class="draggable sticky-note sticky-arena" style="top: 35%; left: 45%; --note-color: #F3E5F5;">
-          <div class="note-title">
-            <a href="https://www.are.na/francesco-bernini/two-zero-two-six-2m8-hk_mexy" target="_blank" class="arena-channel-link">Are.na / 2026</a>
+          <div class="note-header-row">
+            <button class="gallery-nav-btn arena-prev" aria-label="Previous">&larr;</button>
+            <div class="note-title">
+              <a href="https://www.are.na/francesco-bernini/two-zero-two-six-2m8-hk_mexy" target="_blank" class="arena-channel-link">Are.na / 2026</a>
+            </div>
+            <button class="gallery-nav-btn arena-next" aria-label="Next">&rarr;</button>
           </div>
           <div class="note-body">
             <div class="arena-gallery">
@@ -144,8 +157,8 @@
         </div>
 
         <!-- Sticky Note: Pong -->
-        <div class="draggable sticky-note sticky-pong" style="top: 10%; left: 35%; --note-color: #1a1a1a;">
-          <div class="note-title pong-title">PONG</div>
+        <div class="draggable sticky-note sticky-pong" style="top: 10%; left: 35%; --note-color: #1a1a1a; display: none;">
+          <div class="note-title pong-title">Pong</div>
           <div class="note-body">
             <canvas id="pong-canvas"></canvas>
             <div class="pong-controls">
@@ -166,34 +179,22 @@
   <div id="projects-container">
     <!-- Project 1 -->
     <article id="project-1" class="project-section">
-      <div class="project-info">
-        <div class="project-header">
-          <span class="year">2025</span>
-          <h2>One Stroke</h2>
+      <div class="proj-row">
+        <div class="proj-col1">
+          <div>2025</div>
+          <div>One Stroke</div>
         </div>
-
-        <div class="project-details box-content snippet">
-          <p class="caption"><b>One Stroke</b> explores the evolution of monolinear and vector fonts, tracing their
-            transformation
-            from industrial tools to objects of visual experimentation. It examines the transition from technical
-            instrument
-            to expressive resource, focusing on the design methodologies applied in modern typeface renditions and how
-            these
-            experiences converge in the creation of an online type tool capable of extracting a single-line vector from
-            any
-            typeface. The book is accompanied by a plexiglass piece milled with a composition generated through the
-            tool,
-            serving as a three-dimensional specimen produced with a technique akin to those analyzed in the book.</p>
-
-          <div class="project-meta">
-            <p><strong>ISIA Urbino</strong><br>Bachelor degree thesis project.</p>
-            <p><strong>Supervised by</strong><br>Lorenzo Bravi,<br>Andreas Gysin.</p>
-            <p>143 pages, 12x16 cm</p>
-            <p><strong>Typeset in:</strong> TWK Lausanne, Edition by Elias Hanzer</p>
-          </div>
+        <div class="proj-col2">
+          ISIA Urbino<br>
+          Bachelor degree thesis project.<br>
+          Supervised by<br>
+          Lorenzo Bravi,<br>
+          Andreas Gysin.<br>
+          143 pages, 12x16 cm<br>
+          Typeset in: TWK Lausanne, Edition by Elias Hanzer
         </div>
+        <div class="proj-desc">One Stroke explores the evolution of monolinear and vector fonts, tracing their transformation from industrial tools to objects of visual experimentation. It examines the transition from technical instrument to expressive resource, focusing on the design methodologies applied in modern typeface renditions and how these experiences converge in the creation of an online type tool capable of extracting a single-line vector from any typeface. The book is accompanied by a plexiglass piece milled with a composition generated through the tool, serving as a three-dimensional specimen produced with a technique akin to those analyzed in the book.</div>
       </div>
-
       <div class="slideshow">
         <img src="imgs/projects/01_one_stroke/1.jpg" alt="One Stroke 1">
         <img src="imgs/projects/01_one_stroke/2.jpg" alt="One Stroke 2">
@@ -208,28 +209,22 @@
 
     <!-- Project 2: Dep Se -->
     <article id="project-2" class="project-section">
-      <div class="project-info">
-        <div class="project-header">
-          <span class="year">2024</span>
-          <h2>Dep Se</h2>
+      <div class="proj-row">
+        <div class="proj-col1">
+          <div>2024</div>
+          <div>Dep Se</div>
         </div>
-
-
-        <div class="project-details box-content snippet">
-          <p class="caption">Proposal for the first edition of <b>DĒP SĒ Festival</b>, a fictional project that
-            envisions the
-            creation of a multidisciplinary cultural event. The project includes the development of the festival’s
-            concept, curatorial direction, visual identity, website, social media presence, and merchandise design.The
-            conceptual foundation of the festival draws inspiration from Mediterranea’s ongoing efforts to shed light on
-            the humanitarian tragedies taking place across the Mediterranean Sea. It focuses on raising awareness about
-            the countless victims of migratory journeys—individuals forced to cross the sea in search of safety, fleeing
-            from war, poverty, and environmental catastrophes.</p>
-          <div class="project-meta">
-            <p><strong>ISIA Urbino</strong><br>Design Metodology Course</p>
-            <p><strong>Supervised by</strong><br>Beppe Chia</p>
-            <p><strong>with</strong><br>Miriam Sannino,<br>Giorgia Frigerio,<br>Caterina Stellini</p>
-          </div>
+        <div class="proj-col2">
+          ISIA Urbino<br>
+          Design Methodology Course<br>
+          Supervised by<br>
+          Beppe Chia<br>
+          with<br>
+          Miriam Sannino,<br>
+          Giorgia Frigerio,<br>
+          Caterina Stellini
         </div>
+        <div class="proj-desc">Proposal for the first edition of <b>DĒP SĒ Festival</b>, a fictional project that envisions the creation of a multidisciplinary cultural event. The project includes the development of the festival’s concept, curatorial direction, visual identity, website, social media presence, and merchandise design. The conceptual foundation of the festival draws inspiration from Mediterranea’s ongoing efforts to shed light on the humanitarian tragedies taking place across the Mediterranean Sea. It focuses on raising awareness about the countless victims of migratory journeys—individuals forced to cross the sea in search of safety, fleeing from war, poverty, and environmental catastrophes.</div>
       </div>
       <div class="slideshow">
         <img src="imgs/projects/02_dep_se/1.jpg" alt="Dep Se 1">
@@ -242,31 +237,21 @@
 
     <!-- Project 3: Processed Shore -->
     <article id="project-3" class="project-section">
-      <div class="project-info">
-        <div class="project-header">
-          <span class="year">2023</span>
-          <h2>Processed<br>Shore</h2>
+      <div class="proj-row">
+        <div class="proj-col1">
+          <div>2023</div>
+          <div>Processed Shore</div>
         </div>
-
-
-        <div class="project-details box-content snippet">
-          <p class="caption"><b>Processed Shore</b> is a fictional editorial project that presents a playful and
-            experimental
-            fusion between Generative Design by Hartmut Bohnacker and Stephen Shore by Michael Fried. The publication
-            explores the intersection between algorithmic creation and photographic theory, translating textual and
-            visual material into a new hybrid form. The images featured in the book are generated through a custom
-            Processing sketch, which draws inspiration from the visual structures found in Bohnacker’s work while
-            integrating descriptive phrases extracted from Fried’s critical text. This dialogue between code and
-            language creates a continuous exchange between analytical and perceptual modes of reading. Across its pages,
-            the complete essay unfolds in a linear sequence, interwoven with the generative imagery, producing a rhythm
-            that blurs the boundary between image and text.</p>
-          <div class="project-meta">
-            <p><strong>ISIA Urbino</strong><br>Editorial Design Course</p>
-            <p><strong>Supervised by</strong><br>Valerio Di Lucente</p>
-            <p>148 pages, 21x15 cm</p>
-            <p><strong>Typeset in:</strong><br>TWK Lausanne,<br>ABC Laica</p>
-          </div>
+        <div class="proj-col2">
+          ISIA Urbino<br>
+          Editorial Design Course<br>
+          Supervised by<br>
+          Valerio Di Lucente<br>
+          148 pages, 21x15 cm<br>
+          Typeset in: TWK Lausanne,<br>
+          ABC Laica
         </div>
+        <div class="proj-desc"><b>Processed Shore</b> is a fictional editorial project that presents a playful and experimental fusion between Generative Design by Hartmut Bohnacker and Stephen Shore by Michael Fried. The publication explores the intersection between algorithmic creation and photographic theory, translating textual and visual material into a new hybrid form. The images featured in the book are generated through a custom Processing sketch, which draws inspiration from the visual structures found in Bohnacker’s work while integrating descriptive phrases extracted from Fried’s critical text. This dialogue between code and language creates a continuous exchange between analytical and perceptual modes of reading. Across its pages, the complete essay unfolds in a linear sequence, interwoven with the generative imagery, producing a rhythm that blurs the boundary between image and text.</div>
       </div>
       <div class="slideshow">
         <img src="imgs/projects/03_processed_shore/1.jpg" alt="Processed Shore 1">
@@ -282,28 +267,21 @@
 
     <!-- Project 4: Un Giorno -->
     <article id="project-4" class="project-section">
-      <div class="project-info">
-        <div class="project-header">
-          <span class="year">2024</span>
-          <h2>Un Giorno</h2>
+      <div class="proj-row">
+        <div class="proj-col1">
+          <div>2024</div>
+          <div>Un Giorno</div>
         </div>
-
-
-        <div class="project-details box-content snippet">
-          <p class="caption"><b>UN GIORNO</b> is a fictional newspaper that narrates the same date over the span of
-            thirty
-            years, tracing its repetition through time and observing how history, politics, and global attention evolve
-            across decades. The project focuses on the front covers of the Italian newspaper La Repubblica, selecting
-            and highlighting the nations that are mentioned in the main headlines of each edition. By isolating and
-            emphasizing these geographical references, UN GIORNO visually reconstructs the shifting map of international
-            interest as reflected in Italian media.</p>
-          <div class="project-meta">
-            <p><strong>ISIA Urbino</strong><br>Editorial Design Course</p>
-            <p><strong>Supervised by</strong><br>Valerio Di Lucente</p>
-            <p>100 pages, 28x40 cm</p>
-            <p><strong>Typeset in:</strong><br>Times New Roman,<br>Arial</p>
-          </div>
+        <div class="proj-col2">
+          ISIA Urbino<br>
+          Editorial Design Course<br>
+          Supervised by<br>
+          Valerio Di Lucente<br>
+          100 pages, 28x40 cm<br>
+          Typeset in: Times New Roman,<br>
+          Arial
         </div>
+        <div class="proj-desc"><b>UN GIORNO</b> is a fictional newspaper that narrates the same date over the span of thirty years, tracing its repetition through time and observing how history, politics, and global attention evolve across decades. The project focuses on the front covers of the Italian newspaper La Repubblica, selecting and highlighting the nations that are mentioned in the main headlines of each edition. By isolating and emphasizing these geographical references, UN GIORNO visually reconstructs the shifting map of international interest as reflected in Italian media.</div>
       </div>
       <div class="slideshow">
         <img src="imgs/projects/04_un_giorno/1.jpg" alt="Un Giorno 1">
@@ -315,27 +293,18 @@
 
     <!-- Project 5: Physical Words -->
     <article id="project-5" class="project-section">
-      <div class="project-info">
-        <div class="project-header">
-          <span class="year">2024</span>
-          <h2>Physical Words</h2>
+      <div class="proj-row">
+        <div class="proj-col1">
+          <div>2024</div>
+          <div>Physical Words</div>
         </div>
-
-
-        <div class="project-details box-content snippet">
-          <p class="caption">Visual identity and space sonorization designed for <b>Physical Words</b>, final exhibition
-            of the
-            course held by ParasiteParasite at ISIA Urbino.
-            The exhibition consisted of five performances presenting hypothetical curatorial projects conceived for five
-            different hostile environments. Each solid represents the structure designed for one of the projects.The
-            performances, hosted in Urbino’s botanic garden, were accompanied by a site-specific soundscape composition
-            diffused through a hidden speaker system placed in selected points across the garden. The sonic layer was
-            designed to subtly guide visitors toward each performance location.</p>
-          <div class="project-meta">
-            <p><strong>Orto Botanico dell'Università<br>di Urbino Carlo Bo</strong></p>
-            <p><strong>Supervised by</strong><br>ParasiteParasite</p>
-          </div>
+        <div class="proj-col2">
+          Orto Botanico dell’Università<br>
+          di Urbino Carlo Bo<br>
+          Supervised by<br>
+          ParasiteParasite
         </div>
+        <div class="proj-desc">Visual identity and space sonorization designed for <b>Physical Words</b>, final exhibition of the course held by ParasiteParasite at ISIA Urbino. The exhibition consisted of five performances presenting hypothetical curatorial projects conceived for five different hostile environments. Each solid represents the structure designed for one of the projects. The performances, hosted in Urbino’s botanic garden, were accompanied by a site-specific soundscape composition diffused through a hidden speaker system placed in selected points across the garden. The sonic layer was designed to subtly guide visitors toward each performance location.</div>
       </div>
       <div class="slideshow">
         <video src="imgs/projects/05_physical_words/1.mp4" autoplay muted loop playsinline></video>

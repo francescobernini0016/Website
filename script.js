@@ -301,7 +301,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const projects = document.querySelectorAll('.project-section');
   projects.forEach(project => {
-    const title = project.querySelector('h2').textContent;
+    const titleEl = project.querySelector('h2') || project.querySelector('.proj-col1 div:last-child');
+    const title = titleEl ? titleEl.textContent.trim() : project.id;
     const link = document.createElement('a');
     link.textContent = title;
     link.addEventListener('click', () => {
@@ -363,16 +364,25 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function fetchArena() {
-      fetch('https://api.are.na/v3/channels/two-zero-two-six-2m8-hk_mexy/contents')
-        .then(r => r.json())
+      fetch('https://api.are.na/v2/channels/two-zero-two-six-2m8-hk_mexy/contents?per=100')
+        .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
         .then(res => {
-          const blocks = res.data || res;
-          const imageBlocks = blocks.filter(b => b.type === 'Image' && b.image).reverse();
-          if (imageBlocks.length === 0) return;
+          const blocks = Array.isArray(res) ? res : (res.contents || res.data || []);
+          const imageBlocks = blocks.filter(b => (b.class === 'Image' || b.type === 'Image') && b.image).reverse();
+
+          if (imageBlocks.length === 0) {
+            galleryEl.innerHTML = '<div class="arena-loading">no images</div>';
+            return;
+          }
 
           galleryEl.innerHTML = '';
           imageBlocks.forEach(block => {
-            const src = block.image.large ? block.image.large.src : block.image.src;
+            const img = block.image;
+            const src = (img.large && img.large.url)
+              || (img.display && img.display.url)
+              || (img.original && img.original.url)
+              || (img.square && img.square.url);
+            if (!src) return;
             const slide = document.createElement('div');
             slide.classList.add('arena-slide');
             slide.innerHTML = `<img src="${src}" alt="${block.title || 'Are.na'}">`;
@@ -381,10 +391,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
           updateArenaCounter();
         })
-        .catch(() => {
-          galleryEl.innerHTML = '<div class="arena-loading">could not load</div>';
+        .catch(err => {
+          galleryEl.innerHTML = `<div class="arena-loading">${err.message || 'could not load'}</div>`;
         });
     }
+
+    function currentArenaIdx() {
+      const slides = galleryEl.querySelectorAll('.arena-slide');
+      if (!slides.length) return 0;
+      return Math.round(galleryEl.scrollLeft / (slides[0].offsetWidth + 6));
+    }
+
+    function arenaScrollTo(idx) {
+      const slides = galleryEl.querySelectorAll('.arena-slide');
+      if (!slides.length) return;
+      idx = Math.max(0, Math.min(idx, slides.length - 1));
+      galleryEl.scrollTo({ left: idx * (slides[0].offsetWidth + 6), behavior: 'smooth' });
+    }
+
+    const arenaPrevBtn = arenaNote.querySelector('.arena-prev');
+    const arenaNextBtn = arenaNote.querySelector('.arena-next');
+    if (arenaPrevBtn) arenaPrevBtn.addEventListener('click', () => arenaScrollTo(currentArenaIdx() - 1));
+    if (arenaNextBtn) arenaNextBtn.addEventListener('click', () => arenaScrollTo(currentArenaIdx() + 1));
 
     galleryEl.addEventListener('scroll', updateArenaCounter);
     fetchArena();
@@ -514,12 +542,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }, { passive: false });
 
     function drawFrame() {
-      ctx.fillStyle = '#1a1a1a';
+      ctx.fillStyle = '#ffffff';
       ctx.fillRect(0, 0, W, H);
 
       // Dashed center line
       ctx.setLineDash([4, 6]);
-      ctx.strokeStyle = 'rgba(255,255,255,0.15)';
+      ctx.strokeStyle = 'rgba(0,0,0,0.12)';
       ctx.beginPath();
       ctx.moveTo(0, H / 2);
       ctx.lineTo(W, H / 2);
@@ -527,14 +555,14 @@ document.addEventListener('DOMContentLoaded', () => {
       ctx.setLineDash([]);
 
       // Score on canvas
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.25)';
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
       ctx.font = 'bold ' + Math.round(H * 0.12) + 'px var(--font-main, sans-serif)';
       ctx.textAlign = 'center';
       ctx.fillText(s1, W / 2, H * 0.62);
       ctx.fillText(s2, W / 2, H * 0.42);
 
       // Paddles
-      ctx.fillStyle = '#fff';
+      ctx.fillStyle = '#000';
       ctx.fillRect(p1x - paddleW / 2, H - paddleH - 8, paddleW, paddleH);
       ctx.fillRect(p2x - paddleW / 2, 8, paddleW, paddleH);
 
