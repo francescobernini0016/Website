@@ -1,7 +1,12 @@
 {
   "permissions": {
     "allow": [
-      "Bash(git commit -m ':*)"
+      "Bash(git commit -m ':*)",
+      "Read(//Users/francescobernini/Desktop/Grafica/BFsynths/bf-21_sloth/bf_21_222_PHOTOS/EDITS/**)",
+      "Read(//Users/francescobernini/Desktop/Grafica/BFsynths/bf-23_4env/bf-23_4env_photos/**)",
+      "Read(//Users/francescobernini/Desktop/Grafica/BFsynths/bf-31_5-step/bf-31_5-step-PHOTOS/EDIT/**)",
+      "Read(//Users/francescobernini/Desktop/Grafica/BFsynths/bf-23_4env/**)",
+      "Read(//Users/francescobernini/Desktop/Grafica/BFsynths/general/photos/**)"
     ]
   }
 }

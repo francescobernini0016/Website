@@ -463,6 +463,26 @@ document.addEventListener('DOMContentLoaded', () => {
     updateCounter();
   });
 
+  // Recipe navigation
+  document.querySelectorAll('.sticky-recipe').forEach(note => {
+    const slides = note.querySelectorAll('.recipe-slide');
+    const titleEl = note.querySelector('.recipe-name-title');
+    const prevBtn = note.querySelector('.recipe-prev');
+    const nextBtn = note.querySelector('.recipe-next');
+    let currentIndex = 0;
+
+    function showRecipe(idx) {
+      slides.forEach(s => s.style.display = 'none');
+      slides[idx].style.display = '';
+      titleEl.textContent = slides[idx].dataset.recipe;
+      currentIndex = idx;
+    }
+
+    prevBtn.addEventListener('click', () => showRecipe((currentIndex - 1 + slides.length) % slides.length));
+    nextBtn.addEventListener('click', () => showRecipe((currentIndex + 1) % slides.length));
+    showRecipe(0);
+  });
+
   // Pong
   const pongCanvas = document.getElementById('pong-canvas');
   if (pongCanvas) {
@@ -698,11 +718,12 @@ function randomizePositions(images, viewportWidth, viewportHeight) {
       img.style.visibility = 'visible';
     });
   } else {
-    // Get header rect to use as exclusion zone
-    const hero = document.getElementById('floating-hero');
-    const heroRect = hero ? hero.getBoundingClientRect() : null;
-    const margin = 20; // extra margin around header
+    // Use hero-bg (the visible caption bar) as the top exclusion boundary
+    const heroBg = document.getElementById('hero-bg');
+    const heroBgRect = heroBg ? heroBg.getBoundingClientRect() : null;
+    const topMin = heroBgRect ? Math.ceil(heroBgRect.bottom) + 20 : 160;
 
+    const margin = 20;
     const maxOverlap = 0.2; // max 1/5 overlap
     const maxAttempts = 100;
     const edgePad = 20;
@@ -717,28 +738,13 @@ function randomizePositions(images, viewportWidth, viewportHeight) {
 
       while (!isValidPosition && attempts < maxAttempts) {
         attempts++;
-        randomTop = edgePad + Math.floor(Math.random() * (viewportHeight - imgHeight - edgePad * 2));
+        randomTop = topMin + Math.floor(Math.random() * Math.max(10, viewportHeight - imgHeight - topMin - edgePad));
         randomLeft = edgePad + Math.floor(Math.random() * (viewportWidth - imgWidth - edgePad * 2));
 
         if (randomTop < 0) randomTop = edgePad;
         if (randomLeft < 0) randomLeft = edgePad;
 
         isValidPosition = true;
-
-        // Check overlap with header
-        if (heroRect) {
-          const hTop = heroRect.top - margin;
-          const hLeft = heroRect.left - margin;
-          const hBottom = heroRect.bottom + margin;
-          const hRight = heroRect.right + margin;
-
-          const overH = Math.max(0, Math.min(randomTop + imgHeight, hBottom) - Math.max(randomTop, hTop));
-          const overW = Math.max(0, Math.min(randomLeft + imgWidth, hRight) - Math.max(randomLeft, hLeft));
-          if (overH > 0 && overW > 0) {
-            isValidPosition = false;
-            continue;
-          }
-        }
 
         // Check overlap with other notes (max 1/5 of smaller note)
         for (let i = 0; i < images.length; i++) {

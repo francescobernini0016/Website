@@ -56,36 +56,61 @@
       <div class="gallery">
 
         <!-- Sticky Note: Recipe -->
-        <div class="draggable sticky-note" style="top: 8%; left: 8%; --note-color: #FFF9C4;">
-          <div class="note-title">Stufato di Legumi</div>
+        <div class="draggable sticky-note sticky-recipe" style="top: 8%; left: 8%; --note-color: #FFF9C4;">
+          <div class="note-header-row">
+            <button class="gallery-nav-btn recipe-prev" aria-label="Previous recipe">&larr;</button>
+            <div class="note-title recipe-name-title">Stufato di Legumi</div>
+            <button class="gallery-nav-btn recipe-next" aria-label="Next recipe">&rarr;</button>
+          </div>
           <div class="note-body">
-            <p><strong>Ingredienti (per 2 persone):</strong></p>
-            <ul>
-              <li><strong>Olio EVO:</strong> 40 ml</li>
-              <li><strong>Cipolla:</strong> 1 grossa</li>
-              <li><strong>Spezie:</strong> 1 cucchiaino di cumino, &frac12; di zenzero, 2 di curcuma, 1 puntina di cannella</li>
-              <li><strong>Aglio:</strong> 1 spicchio</li>
-              <li><strong>Pasta di peperoncino:</strong> &frac12; cucchiaino</li>
-              <li><strong>Fagioli rossi:</strong> 200 g</li>
-              <li><strong>Ceci:</strong> 200 g</li>
-              <li><strong>Prugne della California:</strong> 5 o 6</li>
-              <li><strong>Acqua:</strong> &frac12; bicchiere</li>
-              <li><strong>Condimenti:</strong> sale, pepe, scorza di limone q.b.</li>
-            </ul>
-            <p><strong>Procedimento:</strong></p>
-            <ol>
-              <li>Cipolla a fette in casseruola con olio e spezie. Aggiungere sale subito.</li>
-              <li>Aglio tritato + pasta di peperoncino. Tostare ~1 min.</li>
-              <li>Aggiungere ceci, fagioli, acqua di cottura, prugne a pezzetti e acqua.</li>
-              <li>Cuocere ~10 min a fuoco medio fino a crema densa.</li>
-              <li>Impiattare con prugne intere e scorza di limone.</li>
-            </ol>
+            <div class="recipe-slide" data-recipe="Stufato di Legumi">
+              <p><strong>Ingredienti (per 2 persone):</strong></p>
+              <ul>
+                <li><strong>Olio EVO:</strong> 40 ml</li>
+                <li><strong>Cipolla:</strong> 1 grossa</li>
+                <li><strong>Spezie:</strong> 1 cucchiaino di cumino, &frac12; di zenzero, 2 di curcuma, 1 puntina di cannella</li>
+                <li><strong>Aglio:</strong> 1 spicchio</li>
+                <li><strong>Pasta di peperoncino:</strong> &frac12; cucchiaino</li>
+                <li><strong>Fagioli rossi:</strong> 200 g</li>
+                <li><strong>Ceci:</strong> 200 g</li>
+                <li><strong>Prugne della California:</strong> 5 o 6</li>
+                <li><strong>Acqua:</strong> &frac12; bicchiere</li>
+                <li><strong>Condimenti:</strong> sale, pepe, scorza di limone q.b.</li>
+              </ul>
+              <p><strong>Procedimento:</strong></p>
+              <ol>
+                <li>Cipolla a fette in casseruola con olio e spezie. Aggiungere sale subito.</li>
+                <li>Aglio tritato + pasta di peperoncino. Tostare ~1 min.</li>
+                <li>Aggiungere ceci, fagioli, acqua di cottura, prugne a pezzetti e acqua.</li>
+                <li>Cuocere ~10 min a fuoco medio fino a crema densa.</li>
+                <li>Impiattare con prugne intere e scorza di limone.</li>
+              </ol>
+            </div>
+            <div class="recipe-slide" data-recipe="Panelle" style="display:none">
+              <p><strong>Ingredienti (per circa 40 panelle):</strong></p>
+              <ul>
+                <li><strong>Farina di ceci:</strong> 500 g</li>
+                <li><strong>Acqua:</strong> circa 1,4 litri</li>
+                <li><strong>Sale fino:</strong> 20 g</li>
+                <li><strong>Prezzemolo:</strong> un ciuffo</li>
+                <li><strong>Olio di semi:</strong> q.b. per friggere</li>
+                <li><em>(Opzionale)</em> <strong>Pane:</strong> panini morbidi (tipo vastedda o con semi) per servire</li>
+              </ul>
+              <p><strong>Procedimento:</strong></p>
+              <ol>
+                <li><strong>Miscelazione:</strong> In una pentola capiente, mescola la farina di ceci e il sale a secco. Aggiungi l&rsquo;acqua poco alla volta mescolando con una frusta per evitare grumi, fino a ottenere un composto liquido ma che &ldquo;fila&rdquo;.</li>
+                <li><strong>Cottura:</strong> Cuoci mescolando sempre. Quando la farina inizia ad addensarsi, mescola con energia per evitare che si attacchi. Cuoci per circa 30 minuti fino a ottenere un composto denso e omogeneo. A fine cottura, aggiungi il prezzemolo tritato.</li>
+                <li><strong>Formatura:</strong> Stendi l&rsquo;impasto ancora caldo su un piano di marmo (o una teglia rovesciata) con una spatola, a uno spessore di 4&ndash;5 mm. Lascia raffreddare leggermente, quindi taglia in rettangoli.</li>
+                <li><strong>Frittura:</strong> Friggi in abbondante olio caldo per circa 3 minuti, girando finché non sono dorate e croccanti.</li>
+                <li><strong>Servizio:</strong> Scola su carta assorbente e servi ben calde, da sole o nel classico panino (&ldquo;pane e panelle&rdquo;).</li>
+              </ol>
+            </div>
           </div>
         </div>
 
         <!-- Sticky Note: Cars -->
         <div class="draggable sticky-note" style="top: 15%; left: 55%; --note-color: #E3F2FD;">
-          <div class="note-title">Cars I Like</div>
+          <div class="note-title">🚘</div>
           <div class="note-body">
             <ul>
               <li><a href="https://en.wikipedia.org/wiki/Nissan_Micra#K11" target="_blank">Nissan Micra K11</a></li>
@@ -101,10 +126,13 @@
 
         <!-- Sticky Note: Books -->
         <div class="draggable sticky-note" style="top: 45%; left: 25%; --note-color: #FCE4EC;">
-          <div class="note-title">Books I Like</div>
+          <div class="note-title">📒</div>
           <div class="note-body">
             <ul>
               <li><a href="https://archive.org/details/amiga-abasi-c-reference-manual" target="_blank">Amiga BASIC Reference Manual</a></li>
+              <li><a href="https://archive.org/details/citadel-miniatures-catalogue-1980-2015/1980%20-%20Citadel%20Miniatures%20Catalogue%20Red/" target="_blank">Citadel Miniatures Catalogue 1980</a></li>
+              <li><a href="https://archive.org/details/winampskin_Crazy_Town_CD_Cover" target="_blank">Winamp Skin — Crazy Town CD Cover</a></li>
+              <li><a href="https://archive.org/details/MacWorld_9810_October_1998" target="_blank">MacWorld October 1998</a></li>
             </ul>
           </div>
         </div>
@@ -187,9 +215,7 @@
         <div class="proj-col2">
           ISIA Urbino<br>
           Bachelor degree thesis project.<br>
-          Supervised by<br>
-          Lorenzo Bravi,<br>
-          Andreas Gysin.<br>
+          Supervised by Lorenzo Bravi, Andreas Gysin.<br>
           143 pages, 12x16 cm<br>
           Typeset in: TWK Lausanne, Edition by Elias Hanzer
         </div>
@@ -217,12 +243,8 @@
         <div class="proj-col2">
           ISIA Urbino<br>
           Design Methodology Course<br>
-          Supervised by<br>
-          Beppe Chia<br>
-          with<br>
-          Miriam Sannino,<br>
-          Giorgia Frigerio,<br>
-          Caterina Stellini
+          Supervised by Beppe Chia.<br>
+          with Miriam Sannino, Giorgia Frigerio. Caterina Stellini<br>
         </div>
         <div class="proj-desc">Proposal for the first edition of <b>DĒP SĒ Festival</b>, a fictional project that envisions the creation of a multidisciplinary cultural event. The project includes the development of the festival’s concept, curatorial direction, visual identity, website, social media presence, and merchandise design. The conceptual foundation of the festival draws inspiration from Mediterranea’s ongoing efforts to shed light on the humanitarian tragedies taking place across the Mediterranean Sea. It focuses on raising awareness about the countless victims of migratory journeys—individuals forced to cross the sea in search of safety, fleeing from war, poverty, and environmental catastrophes.</div>
       </div>
@@ -245,11 +267,9 @@
         <div class="proj-col2">
           ISIA Urbino<br>
           Editorial Design Course<br>
-          Supervised by<br>
-          Valerio Di Lucente<br>
+          Supervised by Valerio Di Lucente.<br>
           148 pages, 21x15 cm<br>
-          Typeset in: TWK Lausanne,<br>
-          ABC Laica
+          Typeset in: TWK Lausanne, ABC Laica
         </div>
         <div class="proj-desc"><b>Processed Shore</b> is a fictional editorial project that presents a playful and experimental fusion between Generative Design by Hartmut Bohnacker and Stephen Shore by Michael Fried. The publication explores the intersection between algorithmic creation and photographic theory, translating textual and visual material into a new hybrid form. The images featured in the book are generated through a custom Processing sketch, which draws inspiration from the visual structures found in Bohnacker’s work while integrating descriptive phrases extracted from Fried’s critical text. This dialogue between code and language creates a continuous exchange between analytical and perceptual modes of reading. Across its pages, the complete essay unfolds in a linear sequence, interwoven with the generative imagery, producing a rhythm that blurs the boundary between image and text.</div>
       </div>
@@ -275,11 +295,9 @@
         <div class="proj-col2">
           ISIA Urbino<br>
           Editorial Design Course<br>
-          Supervised by<br>
-          Valerio Di Lucente<br>
+          Supervised by Valerio Di Lucente<br>
           100 pages, 28x40 cm<br>
-          Typeset in: Times New Roman,<br>
-          Arial
+          Typeset in: Times New Roman, Arial
         </div>
         <div class="proj-desc"><b>UN GIORNO</b> is a fictional newspaper that narrates the same date over the span of thirty years, tracing its repetition through time and observing how history, politics, and global attention evolve across decades. The project focuses on the front covers of the Italian newspaper La Repubblica, selecting and highlighting the nations that are mentioned in the main headlines of each edition. By isolating and emphasizing these geographical references, UN GIORNO visually reconstructs the shifting map of international interest as reflected in Italian media.</div>
       </div>
@@ -299,10 +317,10 @@
           <div>Physical Words</div>
         </div>
         <div class="proj-col2">
-          Orto Botanico dell’Università<br>
-          di Urbino Carlo Bo<br>
-          Supervised by<br>
-          ParasiteParasite
+          ISIA Urbino<br>
+          Spatial Design Course<br>
+          Orto Botanico dell’Università di Urbino Carlo Bo<br>
+          Supervised by ParasiteParasite.
         </div>
         <div class="proj-desc">Visual identity and space sonorization designed for <b>Physical Words</b>, final exhibition of the course held by ParasiteParasite at ISIA Urbino. The exhibition consisted of five performances presenting hypothetical curatorial projects conceived for five different hostile environments. Each solid represents the structure designed for one of the projects. The performances, hosted in Urbino’s botanic garden, were accompanied by a site-specific soundscape composition diffused through a hidden speaker system placed in selected points across the garden. The sonic layer was designed to subtly guide visitors toward each performance location.</div>
       </div>
@@ -312,6 +330,30 @@
         <img src="imgs/projects/05_physical_words/3.jpg" alt="Physical Words 3">
         <img src="imgs/projects/05_physical_words/4.jpg" alt="Physical Words 4">
         <img src="imgs/projects/05_physical_words/5.jpg" alt="Physical Words 5">
+      </div>
+    </article>
+
+    <!-- Project 6: BF Synths -->
+    <article id="project-6" class="project-section">
+      <div class="proj-row">
+        <div class="proj-col1">
+          <div>2024–</div>
+          <div>Panel design for BF Synths</div>
+        </div>
+        <div class="proj-col2">
+          BF Synths<br>
+          Eurorack module panel design<br>
+          Lead designer<br>
+          6 modules
+        </div>
+        <div class="proj-desc">The 555 Oscillator marked the beginning of BF Synth (<a href="https://instagram.com/bfsynth" target="_blank">@bfsynth</a>), debuting as the cornerstone of the initial four-module launch at Superbooth 2024. Since then, I have served as the lead designer, scaling the brand’s visual language from a single concept into a comprehensive ecosystem of 6 modules as of 2026.</div>
+      </div>
+      <div class="slideshow">
+        <img src="imgs/projects/06_bfsynths/EDIT-135.jpg" alt="BF Synths 1">
+        <img src="imgs/projects/06_bfsynths/EDIT-143.png" alt="BF Synths 2">
+        <img src="imgs/projects/06_bfsynths/IMG_0614.png" alt="BF Synths 3">
+        <img src="imgs/projects/06_bfsynths/Gemini_Generated_Image_g2thscg2thscg2th.png" alt="BF Synths 4">
+        <img src="imgs/projects/06_bfsynths/Gemini_Generated_Image_ffmgrkffmgrkffmg.png" alt="BF Synths 5">
       </div>
     </article>
   </div>
