@@ -80,7 +80,6 @@ body {
 #hero-bg-bio {
   width: 48.3%;
   flex-shrink: 0;
-  font-style: italic;
 }
 
 #hero-bg-contacts {
@@ -92,7 +91,7 @@ body {
 }
 
 #hero-bg-contacts a {
-  color: var(--text-color);
+  color: #0000EE;
   text-decoration: none;
   pointer-events: auto;
   white-space: nowrap;
