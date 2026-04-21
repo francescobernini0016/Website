@@ -88,19 +88,29 @@ document.addEventListener('DOMContentLoaded', () => {
         // Tight grid / masonry packing
         const hero = document.getElementById('floating-hero');
         const heroRect = hero ? hero.getBoundingClientRect() : { bottom: 0, right: 0 };
+        const heroBg = document.getElementById('hero-bg');
+        const heroBgRect = heroBg ? heroBg.getBoundingClientRect() : { bottom: 0 };
         const startX = Math.max(heroRect.right + 30, 40);
-        const startY = 30;
+        const startY = Math.max(heroBgRect.bottom + 30, 60);
         const gap = 14;
         const maxX = window.innerWidth - 30;
         const placed = []; // {x, y, w, h}
 
-        // Also treat hero as a placed rect
+        // Block both the floating hero and the hero-bg caption area
         if (hero) {
           placed.push({
             x: heroRect.left - gap,
             y: heroRect.top - gap,
             w: heroRect.width + gap * 2,
             h: heroRect.height + gap * 2
+          });
+        }
+        if (heroBg) {
+          placed.push({
+            x: 0,
+            y: heroBgRect.top - gap,
+            w: window.innerWidth,
+            h: heroBgRect.height + gap * 2
           });
         }
 

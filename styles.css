@@ -80,6 +80,7 @@ body {
 #hero-bg-bio {
   width: 48.3%;
   flex-shrink: 0;
+  font-style: italic;
 }
 
 #hero-bg-contacts {
@@ -528,6 +529,7 @@ h1 {
 .sticky-recipe {
   display: flex;
   flex-direction: column;
+  text-align: left;
   padding: 0;
   overflow: hidden;
 }
@@ -789,9 +791,16 @@ h1 {
   box-sizing: border-box;
 }
 
-.proj-col2,
-.proj-desc {
+.proj-col2 {
   /* inherits grid row alignment */
+}
+
+.proj-desc {
+  font-style: italic;
+}
+
+.proj-col1 div:last-child {
+  font-weight: bold;
 }
 
 .slideshow {
@@ -951,7 +960,8 @@ h1 {
   .proj-row {
     grid-template-columns: 1fr 2fr;
     padding: 24px;
-    gap: 12px;
+    row-gap: 24px;
+    column-gap: 20px;
   }
 
   .proj-col1 {
@@ -1169,7 +1179,7 @@ h1 {
   .proj-row {
     grid-template-columns: 1fr;
     padding: 16px;
-    gap: 8px;
+    gap: 16px;
   }
 
   .proj-col2 {
