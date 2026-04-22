@@ -39,6 +39,7 @@ body {
   font-family: var(--font-main);
   overflow-x: hidden;
   overflow-y: auto;
+  scroll-behavior: smooth;
 }
 
 body {
@@ -301,6 +302,7 @@ h1 {
 
 /* Sticky Notes */
 .sticky-note {
+  text-align: left;
   background-color: #ffffff;
   border: 1px solid rgba(0, 0, 0, 0.1);
   padding: clamp(16px, 1.2vw, 24px) clamp(18px, 1.3vw, 28px);
@@ -387,11 +389,11 @@ h1 {
 .sticky-note .note-title {
   font-weight: normal;
   font-size: clamp(0.95rem, 0.75rem + 0.25vw, 1.2rem);
+  text-align: center;
   margin: calc(-1 * clamp(16px, 1.2vw, 24px)) calc(-1 * clamp(18px, 1.3vw, 28px)) 10px;
   padding: clamp(14px, 1vw, 20px) clamp(18px, 1.3vw, 28px);
   min-height: 44px;
   box-sizing: border-box;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
   cursor: default;
 }
 
@@ -439,6 +441,25 @@ h1 {
   margin-bottom: 3px;
 }
 
+.sticky-projects .note-body {
+  text-align: center;
+}
+
+.sticky-projects .note-body ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.sticky-projects .note-body a {
+  color: #0000EE;
+  text-decoration: none;
+}
+
+.sticky-projects .note-body a:hover {
+  text-decoration: underline;
+}
+
 /* Photo Gallery Sticky Note */
 .sticky-gallery {
   width: clamp(420px, 28vw, 580px);
@@ -452,7 +473,6 @@ h1 {
   padding: clamp(10px, 0.7vw, 16px) clamp(18px, 1.3vw, 28px);
   min-height: 44px;
   box-sizing: border-box;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
   cursor: grab;
 }
 
