@@ -1,12 +1,14 @@
 document.addEventListener('DOMContentLoaded', () => {
   const images = document.querySelectorAll('.draggable');
+  const scatterNote = document.querySelector('.sticky-scatter');
+  const randomImages = Array.from(images).filter(el => !el.classList.contains('sticky-scatter'));
   let highestZIndex = 100;
 
   const viewportWidth = window.innerWidth;
   const viewportHeight = window.innerHeight;
 
   // Center images initially, then scatter with animation
-  images.forEach(img => {
+  randomImages.forEach(img => {
     const imgHeight = img.offsetHeight || 200;
     const imgWidth = img.offsetWidth || 200;
     img.style.top = `${(viewportHeight - imgHeight) / 2}px`;
@@ -14,10 +16,17 @@ document.addEventListener('DOMContentLoaded', () => {
     img.classList.add('animating');
   });
 
+  // Pin scatter note to bottom-right
+  if (scatterNote) {
+    const pad = 40;
+    scatterNote.style.top = `${viewportHeight - scatterNote.offsetHeight - pad}px`;
+    scatterNote.style.left = `${viewportWidth - scatterNote.offsetWidth - pad}px`;
+  }
+
   setTimeout(() => {
-    randomizePositions(images, window.innerWidth, window.innerHeight);
+    randomizePositions(randomImages, window.innerWidth, window.innerHeight);
     setTimeout(() => {
-      images.forEach(img => img.classList.remove('animating'));
+      randomImages.forEach(img => img.classList.remove('animating'));
     }, 1000);
   }, 100);
 
@@ -716,6 +725,48 @@ document.addEventListener('DOMContentLoaded', () => {
       slider.scrollBy({ left: slider.clientWidth, behavior: 'smooth' });
     });
   });
+
+  // Controls note: letter scatter on hover
+  (function () {
+    const btn = document.getElementById('grid-btn');
+    if (!btn) return;
+
+    function wrapLetters() {
+      const text = btn.textContent;
+      btn.innerHTML = text.split('').map(ch =>
+        `<span class="btn-letter">${ch === ' ' ? '&nbsp;' : ch}</span>`
+      ).join('');
+    }
+
+    wrapLetters();
+    btn.addEventListener('click', () => setTimeout(wrapLetters, 0));
+
+    let animating = false;
+    btn.addEventListener('mouseenter', () => {
+      if (animating) return;
+      animating = true;
+      const noteBody = btn.closest('.note-body');
+      const bodyRect = noteBody.getBoundingClientRect();
+      const letters = btn.querySelectorAll('.btn-letter');
+
+      letters.forEach(letter => {
+        const rx = (Math.random() - 0.5) * bodyRect.width * 0.75;
+        const ry = (Math.random() - 0.5) * bodyRect.height * 0.75;
+        const rot = (Math.random() - 0.5) * 90;
+        letter.style.transition = 'transform 0.2s cubic-bezier(0.25, 1, 0.5, 1)';
+        letter.style.transform = `translate(${rx}px, ${ry}px) rotate(${rot}deg)`;
+      });
+
+      setTimeout(() => {
+        btn.querySelectorAll('.btn-letter').forEach(letter => {
+          letter.style.transition = 'transform 0.55s cubic-bezier(0.25, 1, 0.5, 1)';
+          letter.style.transform = '';
+        });
+        setTimeout(() => { animating = false; }, 600);
+      }, 380);
+    });
+  })();
+
 });
 
 function randomizePositions(images, viewportWidth, viewportHeight) {
