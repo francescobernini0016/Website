@@ -49,8 +49,8 @@ body {
 
 #hero {
   position: relative;
-  height: 100vh;
-  height: 100dvh;
+  height: 80vh;
+  height: 80dvh;
   width: 100%;
   overflow: hidden;
 }
@@ -136,7 +136,7 @@ body {
   background: none;
   border: none;
   font-family: var(--font-main);
-  font-size: 1.5rem;
+  font-size: clamp(0.9rem, 1.25vw, 1.5rem);
   cursor: pointer;
   padding: 0;
   line-height: 1;
@@ -355,20 +355,7 @@ h1 {
   object-fit: contain;
 }
 
-.sticky-note.note-expanded .note-gallery-img img {
-  height: auto;
-  max-height: 55vh;
-  width: 100%;
-  object-fit: contain;
-}
-
-.sticky-note.note-expanded .pong-btn {
-  font-size: 1rem;
-  padding: 6px 14px;
-}
-
-.sticky-note.note-expanded .arena-counter,
-.sticky-note.note-expanded .note-gallery-counter {
+.sticky-note.note-expanded .arena-counter {
   font-size: 0.85rem;
 }
 
@@ -471,11 +458,6 @@ h1 {
   text-decoration: underline;
 }
 
-/* Photo Gallery Sticky Note */
-.sticky-gallery {
-  width: clamp(420px, 28vw, 580px);
-}
-
 .note-header-row {
   display: flex;
   align-items: center;
@@ -502,8 +484,8 @@ h1 {
 
 .gallery-nav-btn {
   background: none;
-  border: 1px solid rgba(0, 0, 0, 0.15);
-  color: inherit;
+  border: none;
+  color: #0056ed;
   font-family: var(--font-main);
   font-size: 0.75rem;
   cursor: pointer;
@@ -512,48 +494,6 @@ h1 {
   min-height: 36px;
   pointer-events: auto;
   line-height: 1;
-  border-radius: 2px;
-}
-
-.gallery-nav-btn:hover {
-  background-color: rgba(0, 0, 0, 0.06);
-}
-
-.note-gallery-wrap {
-  position: relative;
-}
-
-.note-gallery {
-  display: flex;
-  overflow-x: auto;
-  gap: 6px;
-  scroll-snap-type: x mandatory;
-  scrollbar-width: none;
-  pointer-events: auto;
-}
-
-.note-gallery::-webkit-scrollbar {
-  display: none;
-}
-
-.note-gallery-img {
-  flex-shrink: 0;
-  scroll-snap-align: start;
-}
-
-.note-gallery-img img {
-  display: block;
-  width: clamp(385px, 26vw, 540px);
-  height: clamp(290px, 19vw, 400px);
-  object-fit: cover;
-  pointer-events: none;
-}
-
-.note-gallery-counter {
-  text-align: center;
-  font-size: 0.7rem;
-  margin-top: 6px;
-  opacity: 0.5;
 }
 
 /* Recipe Sticky Note */
@@ -666,8 +606,11 @@ h1 {
 
 /* Scatter/Organize note */
 .sticky-scatter {
-  width: clamp(182px, 12.6vw, 280px);
-  height: clamp(182px, 12.6vw, 280px);
+  position: absolute;
+  bottom: 40px;
+  right: 40px;
+  width: clamp(146px, 10.08vw, 224px);
+  height: clamp(146px, 10.08vw, 224px);
   max-height: none;
   padding: 0;
   border-radius: 50%;
@@ -676,6 +619,49 @@ h1 {
   border-color: #0056ed;
   display: flex;
   flex-direction: column;
+}
+
+@keyframes fadeInBtn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes fadeOutBtn {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+#top-btn {
+  display: none;
+  position: fixed;
+  bottom: 40px;
+  right: 40px;
+  width: clamp(146px, 10.08vw, 224px);
+  height: clamp(146px, 10.08vw, 224px);
+  border-radius: 50%;
+  background-color: #0056ed;
+  color: #ffffff;
+  border: none;
+  font-family: 'Times New Roman', Times, serif;
+  font-weight: normal;
+  font-size: clamp(1.2rem, 1.67vw, 2rem);
+  line-height: 1.15;
+  text-align: center;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  padding: 0 clamp(18px, 1.3vw, 28px);
+  box-sizing: border-box;
+  z-index: 5000;
+}
+
+#top-btn.visible {
+  display: flex;
+  animation: fadeInBtn 0.6s ease;
+}
+
+#top-btn.hiding {
+  display: flex;
+  animation: fadeOutBtn 0.5s ease forwards;
 }
 
 .sticky-scatter .hero-action-btn {
@@ -695,10 +681,9 @@ h1 {
 .hero-action-btn {
   background: none;
   border: none;
-  font-family: Arial, sans-serif;
-  font-weight: bold;
-  font-size: 2rem;
-  text-transform: uppercase;
+  font-family: 'Times New Roman', Times, serif, sans-serif;
+  font-weight: normal;
+  font-size: clamp(1.2rem, 1.67vw, 2rem);
   padding: 0;
   cursor: pointer;
   color: var(--text-color);
@@ -707,76 +692,6 @@ h1 {
 
 .btn-letter {
   display: inline-block;
-}
-
-/* Pong Sticky Note */
-.sticky-pong {
-  width: clamp(296px, 20vw, 420px);
-  height: clamp(400px, 30vw, 600px);
-  padding: 0;
-  overflow: hidden;
-  background-color: #ffffff;
-  max-height: none;
-  display: flex;
-  flex-direction: column;
-}
-
-.sticky-pong .pong-title {
-  background: #ffffff;
-  color: #000;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  margin: 0;
-  padding: clamp(10px, 0.8vw, 16px) clamp(14px, 1vw, 22px);
-  font-size: clamp(0.85rem, 0.65rem + 0.25vw, 1.1rem);
-  letter-spacing: 0.15em;
-}
-
-.sticky-pong .note-body {
-  pointer-events: auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 0;
-  flex: 1;
-}
-
-#pong-canvas {
-  display: block;
-  width: 100%;
-  flex: 1;
-  background: #ffffff;
-  cursor: none;
-}
-
-.pong-controls {
-  display: flex;
-  gap: 8px;
-  padding: clamp(8px, 0.6vw, 14px) 0;
-  background: #ffffff;
-  width: 100%;
-  justify-content: center;
-}
-
-.pong-btn {
-  background: none;
-  border: 1px solid rgba(0, 0, 0, 0.2);
-  color: #000;
-  font-family: var(--font-main);
-  font-size: 0.85rem;
-  padding: 4px 10px;
-  cursor: pointer;
-  pointer-events: auto;
-  border-radius: 2px;
-  line-height: 1;
-}
-
-.pong-btn:hover:not(:disabled) {
-  background-color: rgba(0, 0, 0, 0.06);
-}
-
-.pong-btn:disabled {
-  opacity: 0.3;
-  cursor: default;
 }
 
 /* Project Sections */
@@ -866,10 +781,6 @@ h1 {
   box-sizing: border-box;
 }
 
-.proj-col2 {
-  /* inherits grid row alignment */
-}
-
 .proj-desc {
   font-style: italic;
 }
@@ -895,7 +806,7 @@ h1 {
   background: none;
   border: none;
   font-family: var(--font-main);
-  font-size: 2rem;
+  font-size: clamp(1.2rem, 1.67vw, 2rem);
   cursor: pointer;
   padding: 0;
   user-select: none;
@@ -909,9 +820,9 @@ h1 {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #ffffff;
+  color: #0056ed;
   opacity: 0;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+
 }
 
 .slideshow-container:hover .nav-btn {
@@ -941,10 +852,9 @@ h1 {
 
 .slideshow img,
 .slideshow video {
-  height: auto;
+  height: 60vh;
   width: auto;
-  max-width: 100%;
-  max-height: 90vh;
+  max-width: none;
   object-fit: contain;
   border: none;
   flex-shrink: 0;
@@ -1065,7 +975,7 @@ h1 {
 
   .slideshow img,
   .slideshow video {
-    max-height: 60vh;
+    height: 60vh;
   }
 
 }
@@ -1242,7 +1152,7 @@ h1 {
 
   .slideshow img,
   .slideshow video {
-    max-height: 45vh;
+    height: 45vh;
   }
 
   .slide-counter {

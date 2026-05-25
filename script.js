@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
   const images = document.querySelectorAll('.draggable');
-  const scatterNote = document.querySelector('.sticky-scatter');
   const randomImages = Array.from(images).filter(el => !el.classList.contains('sticky-scatter'));
   let highestZIndex = 100;
 
@@ -11,26 +10,19 @@ document.addEventListener('DOMContentLoaded', () => {
   randomImages.forEach(img => {
     const imgHeight = img.offsetHeight || 200;
     const imgWidth = img.offsetWidth || 200;
-    img.style.top = `${(viewportHeight - imgHeight) / 2}px`;
+    img.style.top = `${(viewportHeight * 0.8 - imgHeight) / 2}px`;
     img.style.left = `${(viewportWidth - imgWidth) / 2}px`;
     img.classList.add('animating');
   });
 
-  // Pin scatter note to bottom-right
-  if (scatterNote) {
-    const pad = 40;
-    scatterNote.style.top = `${viewportHeight - scatterNote.offsetHeight - pad}px`;
-    scatterNote.style.left = `${viewportWidth - scatterNote.offsetWidth - pad}px`;
-  }
-
   setTimeout(() => {
-    randomizePositions(randomImages, window.innerWidth, window.innerHeight);
+    randomizePositions(randomImages, window.innerWidth, window.innerHeight * 0.8);
     setTimeout(() => {
       randomImages.forEach(img => img.classList.remove('animating'));
     }, 1000);
   }, 100);
 
-  images.forEach(img => makeDraggable(img));
+  randomImages.forEach(img => makeDraggable(img));
 
   // Double-click to expand sticky notes
   let activeOverlay = null;
@@ -83,13 +75,22 @@ document.addEventListener('DOMContentLoaded', () => {
   // Grid organize toggle
   let isGridded = false;
   const gridBtn = document.getElementById('grid-btn');
+
+  function wrapBtnLetters() {
+    if (!gridBtn) return;
+    const text = gridBtn.textContent;
+    gridBtn.innerHTML = text.split('').map(ch =>
+      `<span class="btn-letter">${ch === ' ' ? '&nbsp;' : ch}</span>`
+    ).join('');
+  }
+
   if (gridBtn) {
     gridBtn.addEventListener('click', () => {
       const notes = document.querySelectorAll('.gallery .draggable');
       if (isGridded) {
         // Scatter back
         notes.forEach(n => n.classList.add('animating'));
-        randomizePositions(notes, window.innerWidth, window.innerHeight);
+        randomizePositions(notes, window.innerWidth, window.innerHeight * 0.8);
         setTimeout(() => notes.forEach(n => n.classList.remove('animating')), 1000);
         gridBtn.textContent = 'Organize';
         isGridded = false;
@@ -176,12 +177,31 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  const topBtn = document.getElementById('top-btn');
+  if (topBtn) {
+    topBtn.addEventListener('click', () => {
+      const hero = document.getElementById('hero');
+      if (hero) hero.scrollIntoView({ behavior: 'smooth' });
+      else window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
 
-  function isOverlapping(r1, r2) {
-    return !(r1.right < r2.left ||
-      r1.left > r2.right ||
-      r1.bottom < r2.top ||
-      r1.top > r2.bottom);
+    const heroSection = document.getElementById('hero');
+    if (heroSection) {
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (!entry.isIntersecting) {
+            topBtn.classList.remove('hiding');
+            topBtn.classList.add('visible');
+          } else {
+            topBtn.classList.remove('visible');
+            topBtn.classList.add('hiding');
+            topBtn.addEventListener('animationend', () => topBtn.classList.remove('hiding'), { once: true });
+          }
+        },
+        { threshold: 0 }
+      );
+      observer.observe(heroSection);
+    }
   }
 
   function makeDraggable(element) {
@@ -306,10 +326,10 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('resize', () => {
     clearTimeout(resizeTimeout);
     resizeTimeout = setTimeout(() => {
-      images.forEach(img => img.classList.add('animating'));
-      randomizePositions(images, window.innerWidth, window.innerHeight);
+      randomImages.forEach(img => img.classList.add('animating'));
+      randomizePositions(randomImages, window.innerWidth, window.innerHeight * 0.8);
       setTimeout(() => {
-        images.forEach(img => img.classList.remove('animating'));
+        randomImages.forEach(img => img.classList.remove('animating'));
       }, 1000);
     }, 200);
   });
@@ -438,50 +458,6 @@ document.addEventListener('DOMContentLoaded', () => {
     setInterval(fetchArena, 60000);
   }
 
-  // Sticky note photo galleries
-  document.querySelectorAll('.sticky-gallery').forEach(note => {
-    const galleries = note.querySelectorAll('.note-gallery');
-    const titleEl = note.querySelector('.gallery-date-title');
-    const counter = note.querySelector('.note-gallery-counter');
-    const prevDateBtn = note.querySelector('.gallery-prev-date');
-    const nextDateBtn = note.querySelector('.gallery-next-date');
-    let currentIndex = Array.from(galleries).findIndex(g => g.style.display !== 'none');
-    if (currentIndex === -1) currentIndex = 0;
-
-    function showGallery(idx) {
-      galleries.forEach(g => g.style.display = 'none');
-      galleries[idx].style.display = 'flex';
-      galleries[idx].scrollLeft = 0;
-      titleEl.textContent = galleries[idx].dataset.gallery;
-      currentIndex = idx;
-      updateCounter();
-    }
-
-    function updateCounter() {
-      const g = galleries[currentIndex];
-      const imgs = g.querySelectorAll('.note-gallery-img');
-      if (imgs.length > 1) {
-        const scrollIdx = Math.round(g.scrollLeft / (g.firstElementChild.offsetWidth + 6));
-        counter.textContent = `${scrollIdx + 1} / ${imgs.length}`;
-      } else {
-        counter.textContent = `1 / ${imgs.length}`;
-      }
-    }
-
-    prevDateBtn.addEventListener('click', () => {
-      const newIdx = (currentIndex - 1 + galleries.length) % galleries.length;
-      showGallery(newIdx);
-    });
-
-    nextDateBtn.addEventListener('click', () => {
-      const newIdx = (currentIndex + 1) % galleries.length;
-      showGallery(newIdx);
-    });
-
-    galleries.forEach(g => g.addEventListener('scroll', updateCounter));
-    updateCounter();
-  });
-
   // Recipe navigation
   document.querySelectorAll('.sticky-recipe').forEach(note => {
     const slides = note.querySelectorAll('.recipe-slide');
@@ -501,168 +477,6 @@ document.addEventListener('DOMContentLoaded', () => {
     nextBtn.addEventListener('click', () => showRecipe((currentIndex + 1) % slides.length));
     showRecipe(0);
   });
-
-  // Pong
-  const pongCanvas = document.getElementById('pong-canvas');
-  if (pongCanvas) {
-    const ctx = pongCanvas.getContext('2d');
-    const paddleH = 6, ballR = 5;
-    let W, H, paddleW;
-    let p1x, p2x;
-    let bx, by, bvx = 0, bvy = 0;
-    let s1 = 0, s2 = 0;
-    let mouseX;
-    let running = false;
-    const startBtn = document.getElementById('pong-start');
-    const stopBtn = document.getElementById('pong-stop');
-    const restartBtn = document.getElementById('pong-restart');
-
-    function sizePong() {
-      const rect = pongCanvas.getBoundingClientRect();
-      const cw = Math.round(rect.width);
-      const ch = Math.round(rect.height);
-      if (cw < 1 || ch < 1) return;
-      pongCanvas.width = cw;
-      pongCanvas.height = ch;
-      W = cw;
-      H = ch;
-      paddleW = Math.round(W * 0.28);
-      if (mouseX === undefined) mouseX = W / 2;
-      if (p1x === undefined) { p1x = W / 2; p2x = W / 2; bx = W / 2; by = H / 2; }
-      drawFrame();
-    }
-
-    function resetBall(dir) {
-      bx = W / 2; by = H / 2;
-      bvx = (Math.random() > 0.5 ? 1 : -1) * 1.8;
-      bvy = dir * 2.2;
-    }
-
-    function fullReset() {
-      running = false;
-      s1 = 0; s2 = 0;
-      p1x = W / 2; p2x = W / 2;
-      bx = W / 2; by = H / 2;
-      bvx = 0; bvy = 0;
-      startBtn.disabled = false;
-      stopBtn.disabled = true;
-      drawFrame();
-    }
-
-    startBtn.addEventListener('click', () => {
-      if (!running) {
-        running = true;
-        if (bvx === 0 && bvy === 0) resetBall(1);
-        startBtn.disabled = true;
-        stopBtn.disabled = false;
-      }
-    });
-
-    stopBtn.addEventListener('click', () => {
-      running = false;
-      startBtn.disabled = false;
-      stopBtn.disabled = true;
-      drawFrame();
-    });
-
-    restartBtn.addEventListener('click', () => {
-      fullReset();
-    });
-
-    pongCanvas.addEventListener('mousemove', e => {
-      const rect = pongCanvas.getBoundingClientRect();
-      mouseX = (e.clientX - rect.left) * (W / rect.width);
-    });
-
-    pongCanvas.addEventListener('touchmove', e => {
-      e.preventDefault();
-      const rect = pongCanvas.getBoundingClientRect();
-      mouseX = (e.touches[0].clientX - rect.left) * (W / rect.width);
-    }, { passive: false });
-
-    function drawFrame() {
-      ctx.fillStyle = '#ffffff';
-      ctx.fillRect(0, 0, W, H);
-
-      // Dashed center line
-      ctx.setLineDash([4, 6]);
-      ctx.strokeStyle = 'rgba(0,0,0,0.12)';
-      ctx.beginPath();
-      ctx.moveTo(0, H / 2);
-      ctx.lineTo(W, H / 2);
-      ctx.stroke();
-      ctx.setLineDash([]);
-
-      // Score on canvas
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
-      ctx.font = 'bold ' + Math.round(H * 0.12) + 'px var(--font-main, sans-serif)';
-      ctx.textAlign = 'center';
-      ctx.fillText(s1, W / 2, H * 0.62);
-      ctx.fillText(s2, W / 2, H * 0.42);
-
-      // Paddles
-      ctx.fillStyle = '#000';
-      ctx.fillRect(p1x - paddleW / 2, H - paddleH - 8, paddleW, paddleH);
-      ctx.fillRect(p2x - paddleW / 2, 8, paddleW, paddleH);
-
-      // Ball
-      ctx.beginPath();
-      ctx.arc(bx, by, ballR, 0, Math.PI * 2);
-      ctx.fill();
-    }
-
-    function pongLoop() {
-      if (running) {
-        // Player paddle — snappier
-        p1x += (mouseX - p1x) * 0.35;
-        p1x = Math.max(paddleW / 2, Math.min(W - paddleW / 2, p1x));
-
-        // AI paddle — slower & dumber
-        const aiTarget = bx + (bvy < 0 ? bvx * ((paddleH + 10 - by) / (bvy || 1)) : 0);
-        p2x += (aiTarget - p2x) * 0.035;
-        p2x = Math.max(paddleW / 2, Math.min(W - paddleW / 2, p2x));
-
-        // Ball
-        bx += bvx; by += bvy;
-
-        // Wall bounce
-        if (bx - ballR <= 0 || bx + ballR >= W) bvx = -bvx;
-
-        // Paddle collision — bottom (player)
-        if (by + ballR >= H - paddleH - 8 && bvy > 0) {
-          if (bx > p1x - paddleW / 2 - ballR && bx < p1x + paddleW / 2 + ballR) {
-            bvy = -bvy;
-            bvx += (bx - p1x) * 0.08;
-            by = H - paddleH - 8 - ballR;
-          }
-        }
-
-        // Paddle collision — top (AI)
-        if (by - ballR <= paddleH + 8 && bvy < 0) {
-          if (bx > p2x - paddleW / 2 - ballR && bx < p2x + paddleW / 2 + ballR) {
-            bvy = -bvy;
-            bvx += (bx - p2x) * 0.08;
-            by = paddleH + 8 + ballR;
-          }
-        }
-
-        // Score
-        if (by > H + ballR) { s2++; resetBall(-1); }
-        if (by < -ballR) { s1++; resetBall(1); }
-
-        // Speed cap — lower
-        bvx = Math.max(-4, Math.min(4, bvx));
-
-        drawFrame();
-      }
-
-      requestAnimationFrame(pongLoop);
-    }
-
-    sizePong();
-    window.addEventListener('resize', sizePong);
-    pongLoop();
-  }
 
   // Slideshow navigation
   const sliders = document.querySelectorAll('.slideshow');
@@ -731,15 +545,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const btn = document.getElementById('grid-btn');
     if (!btn) return;
 
-    function wrapLetters() {
-      const text = btn.textContent;
-      btn.innerHTML = text.split('').map(ch =>
-        `<span class="btn-letter">${ch === ' ' ? '&nbsp;' : ch}</span>`
-      ).join('');
-    }
-
-    wrapLetters();
-    btn.addEventListener('click', () => setTimeout(wrapLetters, 0));
+    wrapBtnLetters();
+    btn.addEventListener('click', () => setTimeout(wrapBtnLetters, 0));
 
     let animating = false;
     btn.addEventListener('mouseenter', () => {
