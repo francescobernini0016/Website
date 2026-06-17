@@ -574,36 +574,6 @@ h1 {
   opacity: 0.5;
 }
 
-/* Nina Protocol Sticky Note */
-.sticky-nina {
-  width: 450px;
-  max-height: none;
-  padding: 0;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-}
-
-.nina-ascii {
-  font-family: monospace;
-  font-size: 0.72em;
-  line-height: 1.25;
-  margin: 0 auto;
-  display: inline-block;
-  text-align: left;
-}
-
-.sticky-nina .note-body {
-  padding: 0;
-  flex: 1;
-  pointer-events: auto;
-}
-
-.sticky-nina .note-body iframe {
-  display: block;
-  border: none;
-}
-
 /* Scatter/Organize note */
 .sticky-scatter {
   position: absolute;
@@ -1044,6 +1014,15 @@ h1 {
 
 /* Mobile */
 @media (max-width: 600px) {
+  #top-btn {
+    width: 96px;
+    height: 96px;
+    bottom: 20px;
+    right: 20px;
+    font-size: 1rem;
+    padding: 0 12px;
+  }
+
   #hero {
     height: auto;
     min-height: auto;
