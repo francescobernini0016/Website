@@ -574,6 +574,39 @@ h1 {
   opacity: 0.5;
 }
 
+/* Bandcamp Sticky Note */
+.sticky-bandcamp {
+  width: 450px;
+  max-height: none;
+  padding: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  /* Promote to its own compositing layer so the iframe moves as one layer
+     during drag/rotate instead of leaving paint trails */
+  will-change: transform;
+}
+
+.sticky-bandcamp .note-title {
+  padding: 8px 12px;
+  font-size: 0.8em;
+  cursor: grab;
+  user-select: none;
+  background: #fff;
+}
+
+.sticky-bandcamp .note-body {
+  padding: 0;
+  flex: 1;
+  pointer-events: auto;
+}
+
+.sticky-bandcamp .note-body iframe {
+  display: block;
+  border: none;
+  backface-visibility: hidden;
+}
+
 /* Scatter/Organize note */
 .sticky-scatter {
   position: absolute;
