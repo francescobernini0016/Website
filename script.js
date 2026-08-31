@@ -84,93 +84,111 @@ document.addEventListener('DOMContentLoaded', () => {
     ).join('');
   }
 
+  // Notes to arrange — never the Organize button itself, so it stays put and clickable
+  function getGalleryNotes() {
+    return Array.from(document.querySelectorAll('.gallery .draggable'))
+      .filter(n => !n.classList.contains('sticky-scatter'));
+  }
+
+  function scatterNotes(notes) {
+    notes.forEach(n => n.classList.add('animating'));
+    randomizePositions(notes, window.innerWidth, window.innerHeight * 0.8);
+    setTimeout(() => notes.forEach(n => n.classList.remove('animating')), 1000);
+  }
+
+  function organizeNotes(notes) {
+    // Tight grid / masonry packing
+    const hero = document.getElementById('floating-hero');
+    const heroRect = hero ? hero.getBoundingClientRect() : { bottom: 0, right: 0, left: 0, top: 0, width: 0, height: 0 };
+    const heroBg = document.getElementById('hero-bg');
+    const heroBgRect = heroBg ? heroBg.getBoundingClientRect() : { bottom: 0, top: 0, height: 0 };
+    const startX = Math.max(heroRect.right + 30, 40);
+    const startY = Math.max(heroBgRect.bottom + 30, 60);
+    const gap = 14;
+    const maxX = window.innerWidth - 30;
+    const placed = []; // {x, y, w, h}
+
+    // Block the floating hero, the hero-bg caption area, and the Organize button
+    if (hero) {
+      placed.push({ x: heroRect.left - gap, y: heroRect.top - gap, w: heroRect.width + gap * 2, h: heroRect.height + gap * 2 });
+    }
+    if (heroBg) {
+      placed.push({ x: 0, y: heroBgRect.top - gap, w: window.innerWidth, h: heroBgRect.height + gap * 2 });
+    }
+    const scatterBtn = document.querySelector('.sticky-scatter');
+    if (scatterBtn) {
+      const sr = scatterBtn.getBoundingClientRect();
+      placed.push({ x: sr.left - gap, y: sr.top - gap, w: sr.width + gap * 2, h: sr.height + gap * 2 });
+    }
+
+    function intersects(ax, ay, aw, ah) {
+      for (const p of placed) {
+        if (ax < p.x + p.w && ax + aw > p.x && ay < p.y + p.h && ay + ah > p.y) return true;
+      }
+      return false;
+    }
+
+    // Sort notes: taller/wider first for better packing
+    const sorted = Array.from(notes).sort((a, b) => {
+      const areaA = (a.offsetWidth || 260) * (a.offsetHeight || 200);
+      const areaB = (b.offsetWidth || 260) * (b.offsetHeight || 200);
+      return areaB - areaA;
+    });
+
+    const step = 8;
+    const areaBottom = window.innerHeight;
+    let overflowCascade = 0;
+
+    sorted.forEach(n => {
+      n.classList.add('animating');
+      const w = n.offsetWidth || 260;
+      const h = n.offsetHeight || 200;
+      const bw = w + gap;
+      const bh = h + gap;
+      let bestX = startX, bestY = startY;
+      let found = false;
+
+      // Scan candidate positions top-to-bottom, left-to-right; pick first fit
+      for (let ty = startY; ty < areaBottom - h; ty += step) {
+        for (let tx = startX; tx + w <= maxX; tx += step) {
+          if (!intersects(tx, ty, bw, bh)) {
+            bestX = tx;
+            bestY = ty;
+            found = true;
+            break;
+          }
+        }
+        if (found) break;
+      }
+
+      if (!found) {
+        // No room left in the visible area — cascade diagonally so notes stay
+        // visible/clickable instead of piling on the exact same spot
+        bestX = Math.min(startX + overflowCascade * 26, Math.max(startX, maxX - w));
+        bestY = Math.min(startY + overflowCascade * 26, Math.max(startY, areaBottom - h));
+        overflowCascade++;
+      }
+
+      n.style.top = bestY + 'px';
+      n.style.left = bestX + 'px';
+      n.style.transform = 'none';
+      n.style.visibility = 'visible';
+
+      placed.push({ x: bestX, y: bestY, w: bw, h: bh });
+    });
+
+    setTimeout(() => notes.forEach(n => n.classList.remove('animating')), 1000);
+  }
+
   if (gridBtn) {
     gridBtn.addEventListener('click', () => {
-      const notes = document.querySelectorAll('.gallery .draggable');
+      const notes = getGalleryNotes();
       if (isGridded) {
-        // Scatter back
-        notes.forEach(n => n.classList.add('animating'));
-        randomizePositions(notes, window.innerWidth, window.innerHeight * 0.8);
-        setTimeout(() => notes.forEach(n => n.classList.remove('animating')), 1000);
+        scatterNotes(notes);
         gridBtn.textContent = 'Organize';
         isGridded = false;
       } else {
-        // Tight grid / masonry packing
-        const hero = document.getElementById('floating-hero');
-        const heroRect = hero ? hero.getBoundingClientRect() : { bottom: 0, right: 0 };
-        const heroBg = document.getElementById('hero-bg');
-        const heroBgRect = heroBg ? heroBg.getBoundingClientRect() : { bottom: 0 };
-        const startX = Math.max(heroRect.right + 30, 40);
-        const startY = Math.max(heroBgRect.bottom + 30, 60);
-        const gap = 14;
-        const maxX = window.innerWidth - 30;
-        const placed = []; // {x, y, w, h}
-
-        // Block both the floating hero and the hero-bg caption area
-        if (hero) {
-          placed.push({
-            x: heroRect.left - gap,
-            y: heroRect.top - gap,
-            w: heroRect.width + gap * 2,
-            h: heroRect.height + gap * 2
-          });
-        }
-        if (heroBg) {
-          placed.push({
-            x: 0,
-            y: heroBgRect.top - gap,
-            w: window.innerWidth,
-            h: heroBgRect.height + gap * 2
-          });
-        }
-
-        function intersects(ax, ay, aw, ah) {
-          for (const p of placed) {
-            if (ax < p.x + p.w && ax + aw > p.x && ay < p.y + p.h && ay + ah > p.y) return true;
-          }
-          return false;
-        }
-
-        // Sort notes: taller/wider first for better packing
-        const sorted = Array.from(notes).sort((a, b) => {
-          const areaA = (a.offsetWidth || 260) * (a.offsetHeight || 200);
-          const areaB = (b.offsetWidth || 260) * (b.offsetHeight || 200);
-          return areaB - areaA;
-        });
-
-        sorted.forEach(n => {
-          n.classList.add('animating');
-          const w = n.offsetWidth || 260;
-          const h = n.offsetHeight || 200;
-          const bw = w + gap;
-          const bh = h + gap;
-          let bestX = startX, bestY = startY;
-          let found = false;
-
-          // Scan candidate positions: top-left corners of gaps
-          // Try y in steps, then x in steps, pick first fit
-          const step = 8;
-          for (let ty = startY; ty < window.innerHeight - h; ty += step) {
-            for (let tx = startX; tx + w <= maxX; tx += step) {
-              if (!intersects(tx, ty, bw, bh)) {
-                bestX = tx;
-                bestY = ty;
-                found = true;
-                break;
-              }
-            }
-            if (found) break;
-          }
-
-          n.style.top = bestY + 'px';
-          n.style.left = bestX + 'px';
-          n.style.transform = 'none';
-          n.style.visibility = 'visible';
-
-          placed.push({ x: bestX, y: bestY, w: bw, h: bh });
-        });
-
-        setTimeout(() => notes.forEach(n => n.classList.remove('animating')), 1000);
+        organizeNotes(notes);
         gridBtn.textContent = 'Scatter';
         isGridded = true;
       }
@@ -321,16 +339,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Debounced resize handler
+  // Debounced resize handler — keep the current mode (organized vs scattered) in sync
   let resizeTimeout;
   window.addEventListener('resize', () => {
     clearTimeout(resizeTimeout);
     resizeTimeout = setTimeout(() => {
-      randomImages.forEach(img => img.classList.add('animating'));
-      randomizePositions(randomImages, window.innerWidth, window.innerHeight * 0.8);
-      setTimeout(() => {
-        randomImages.forEach(img => img.classList.remove('animating'));
-      }, 1000);
+      const notes = getGalleryNotes();
+      if (isGridded) organizeNotes(notes);
+      else scatterNotes(notes);
     }, 200);
   });
 
