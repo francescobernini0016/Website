@@ -1,29 +1,64 @@
-/* HappyTimesNG (serif) — always Regular weight; covers 400-700 so bold never synthesizes */
 @font-face {
   font-family: 'HappyTimesNG';
   src: url('happy-times-NG_regular_master.otf') format('opentype');
-  font-weight: 400 700;
+  font-weight: normal;
   font-style: normal;
 }
+
+@font-face {
+  font-family: 'HappyTimesNG';
+  src: url('happy-times-NG_bold_master.otf') format('opentype');
+  font-weight: bold;
+  font-style: normal;
+}
+
 @font-face {
   font-family: 'HappyTimesNG';
   src: url('happy-times-NG_italic_master.otf') format('opentype');
-  font-weight: 400 700;
+  font-weight: normal;
   font-style: italic;
 }
 
-/* ABC Areal (sans) — always Medium weight; covers 400-700 so bold never synthesizes */
+/* ABC Areal — sans-serif */
+@font-face {
+  font-family: 'ABC Areal';
+  src: url('fonts/ABCAreal-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'ABC Areal';
+  src: url('fonts/ABCAreal-RegularItalic.woff2') format('woff2');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
 @font-face {
   font-family: 'ABC Areal';
   src: url('fonts/ABCAreal-Medium.woff2') format('woff2');
-  font-weight: 400 700;
+  font-weight: 500;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'ABC Areal';
   src: url('fonts/ABCAreal-MediumItalic.woff2') format('woff2');
-  font-weight: 400 700;
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'ABC Areal';
+  src: url('fonts/ABCAreal-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'ABC Areal';
+  src: url('fonts/ABCAreal-BoldItalic.woff2') format('woff2');
+  font-weight: 700;
   font-style: italic;
   font-display: swap;
 }
@@ -94,7 +129,6 @@ body {
   background-color: var(--bg-color);
   color: var(--text-color);
   font-family: var(--font-main);
-  font-synthesis: none; /* never fake bold/italic: sans stays Medium, serif stays Regular */
   overflow-x: hidden;
   overflow-y: auto;
   scroll-behavior: smooth;
@@ -133,7 +167,7 @@ body {
   align-items: start;
   font-family: var(--font-main);
   font-size: 16px;
-  line-height: 1.05;
+  line-height: 20px;
   color: var(--text-color);
 }
 
@@ -864,7 +898,7 @@ h1 {
   align-items: start;
   padding: 44px 29px;
   font-size: 16px;
-  line-height: 1.05;
+  line-height: 20px;
   column-gap: 0;
   box-sizing: border-box;
 }
@@ -1179,7 +1213,7 @@ a {
   border-top: 1px solid var(--border-color);
   font-family: var(--font-main);
   font-size: 16px;
-  line-height: 1.05;
+  line-height: 20px;
 }
 
 /* Mobile */
@@ -1283,8 +1317,6 @@ a {
     grid-template-columns: 1fr;
     padding: 16px;
     gap: 16px;
-    font-size: 20px;   /* uniform corpo (size) with bio/contacts on mobile */
-    line-height: 1.05;
   }
 
   .proj-col1 {
