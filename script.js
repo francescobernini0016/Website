@@ -556,7 +556,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Controls note: letter scatter on hover
+  // Controls note: letter scatter on hover — disabled for now
+  /*
   (function () {
     const btn = document.getElementById('grid-btn');
     if (!btn) return;
@@ -589,6 +590,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }, 380);
     });
   })();
+  */
 
 });
 
